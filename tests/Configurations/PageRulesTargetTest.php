@@ -1,16 +1,18 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 19/09/2017
- * Time: 18:41
+ * Time: 18:41.
  */
 
 use Cloudflare\API\Configurations\PageRulesTargets;
 
 class PageRulesTargetTest extends TestCase
 {
-    public function testGetArray()
+    public function testGetArray(): void
     {
         $targets = new PageRulesTargets('junade.com/*');
         $array = $targets->getArray();

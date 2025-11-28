@@ -1,18 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Endpoints\DNS;
+
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 09/06/2017
- * Time: 15:31
+ * Time: 15:31.
  */
 class DNSTest extends TestCase
 {
-    public function testAddRecord()
+    public function testAddRecord(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/addRecord.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -24,19 +29,19 @@ class DNSTest extends TestCase
                     'name' => 'example.com',
                     'content' => '127.0.0.1',
                     'ttl' => 120,
-                    'proxied' => false
-                ])
+                    'proxied' => false,
+                ]),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com', '127.0.0.1', '120', false);
     }
 
-    public function testAddMXRecordPriority10()
+    public function testAddMXRecordPriority10(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/addRecord.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -50,18 +55,18 @@ class DNSTest extends TestCase
                     'ttl' => 120,
                     'proxied' => false,
             'priority' => 10,
-                ])
+                ]),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', '120', false, 10);
     }
 
-    public function testAddMXRecordPriority0()
+    public function testAddMXRecordPriority0(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/addRecord.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -75,19 +80,18 @@ class DNSTest extends TestCase
                     'ttl' => 120,
                     'proxied' => false,
                     'priority' => 0,
-                ])
+                ]),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', '120', false, 0);
     }
 
-
-    public function testListRecords()
+    public function testListRecords(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listRecords.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -103,10 +107,10 @@ class DNSTest extends TestCase
                     'content' => '127.0.0.1',
                     'order' => 'type',
                     'direction' => 'desc',
-                ])
+                ]),
             );
 
-        $zones = new \Cloudflare\API\Endpoints\DNS($mock);
+        $zones = new DNS($mock);
         $result = $zones->listRecords('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com', '127.0.0.1', 1, 20, 'type', 'desc');
 
         $this->assertObjectHasAttribute('result', $result);
@@ -117,50 +121,50 @@ class DNSTest extends TestCase
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $zones->getBody()->result[0]->id);
     }
 
-    public function testGetDNSRecordDetails()
+    public function testGetDNSRecordDetails(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getDNSRecordDetails.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/dns_records/372e67954025e0ba6aaa6d586b9e0b59')
+                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/dns_records/372e67954025e0ba6aaa6d586b9e0b59'),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $result = $dns->getRecordDetails('023e105f4ecef8ad9ca31a8372d0c353', '372e67954025e0ba6aaa6d586b9e0b59');
 
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $result->id);
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $dns->getBody()->result->id);
     }
 
-    public function testGetRecordID()
+    public function testGetRecordID(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getRecordId.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/dns_records')
+                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/dns_records'),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $result = $dns->getRecordID('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com');
 
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $result);
     }
 
-    public function testUpdateDNSRecord()
+    public function testUpdateDNSRecord(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateDNSRecord.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('put')->willReturn($response);
 
         $details = [
@@ -175,10 +179,10 @@ class DNSTest extends TestCase
             ->method('put')
             ->with(
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/dns_records/372e67954025e0ba6aaa6d586b9e0b59'),
-                $this->equalTo($details)
+                $this->equalTo($details),
             );
 
-        $dns = new \Cloudflare\API\Endpoints\DNS($mock);
+        $dns = new DNS($mock);
         $result = $dns->updateRecordDetails('023e105f4ecef8ad9ca31a8372d0c353', '372e67954025e0ba6aaa6d586b9e0b59', $details);
 
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $result->result->id);

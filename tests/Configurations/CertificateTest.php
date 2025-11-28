@@ -1,11 +1,13 @@
 <?php
 
-use PHPUnit\Framework\TestCase;
+declare(strict_types=1);
+
 use Cloudflare\API\Configurations\Certificate;
+use PHPUnit\Framework\TestCase;
 
 class CertificateTest extends TestCase
 {
-    public function testGetArray()
+    public function testGetArray(): void
     {
         $certificate = new Certificate();
         $certificate->setHostnames(['foo.com', '*.bar.com']);

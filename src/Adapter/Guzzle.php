@@ -1,20 +1,23 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cloudflare\API\Adapter;
 
 use Cloudflare\API\Auth\Auth;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use InvalidArgumentException;
 use Psr\Http\Message\ResponseInterface;
 
 class Guzzle implements Adapter
 {
-    private $client;
+    private readonly Client $client;
 
     /**
      * @inheritDoc
      */
-    public function __construct(Auth $auth, string $baseURI = null)
+    public function __construct(Auth $auth, ?string $baseURI = null)
     {
         if ($baseURI === null) {
             $baseURI = 'https://api.cloudflare.com/client/v4/';
@@ -25,10 +28,9 @@ class Guzzle implements Adapter
         $this->client = new Client([
             'base_uri' => $baseURI,
             'headers' => $headers,
-            'Accept' => 'application/json'
+            'Accept' => 'application/json',
         ]);
     }
-
 
     /**
      * @inheritDoc
@@ -75,8 +77,8 @@ class Guzzle implements Adapter
      */
     public function request(string $method, string $uri, array $data = [], array $headers = [])
     {
-        if (!in_array($method, ['get', 'post', 'put', 'patch', 'delete'])) {
-            throw new \InvalidArgumentException('Request method must be get, post, put, patch, or delete');
+        if (!\in_array($method, ['get', 'post', 'put', 'patch', 'delete'], true)) {
+            throw new InvalidArgumentException('Request method must be get, post, put, patch, or delete');
         }
 
         try {

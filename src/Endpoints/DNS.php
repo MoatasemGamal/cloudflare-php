@@ -1,39 +1,29 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 09/06/2017
- * Time: 15:14
+ * Time: 15:14.
  */
 
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Traits\BodyAccessorTrait;
+use stdClass;
 
 class DNS implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-     *
-     * @param string $zoneID
-     * @param string $type
-     * @param string $name
-     * @param string $content
-     * @param int $ttl
-     * @param bool $proxied
-     * @param string $priority
-     * @param array $data
-     * @return bool
      */
     public function addRecord(
         string $zoneID,
@@ -43,36 +33,31 @@ class DNS implements API
         int $ttl = 0,
         bool $proxied = true,
         string $priority = '',
-        array $data = []
+        array $data = [],
     ): bool {
         $options = [
             'type' => $type,
             'name' => $name,
             'content' => $content,
-            'proxied' => $proxied
+            'proxied' => $proxied,
         ];
 
         if ($ttl > 0) {
             $options['ttl'] = $ttl;
         }
 
-        if (is_numeric($priority)) {
+        if (\is_numeric($priority)) {
             $options['priority'] = (int)$priority;
         }
-        
-        if (!empty($data)) {
+
+        if ($data !== []) {
             $options['data'] = $data;
         }
 
         $user = $this->adapter->post('zones/' . $zoneID . '/dns_records', $options);
 
-        $this->body = json_decode($user->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($user->getBody());
+        return isset($this->body->result->id);
     }
 
     public function listRecords(
@@ -84,60 +69,57 @@ class DNS implements API
         int $perPage = 20,
         string $order = '',
         string $direction = '',
-        string $match = 'all'
-    ): \stdClass {
+        string $match = 'all',
+    ): stdClass {
         $query = [
             'page' => $page,
             'per_page' => $perPage,
-            'match' => $match
+            'match' => $match,
         ];
 
-        if (!empty($type)) {
+        if ($type !== '' && $type !== '0') {
             $query['type'] = $type;
         }
 
-        if (!empty($name)) {
+        if ($name !== '' && $name !== '0') {
             $query['name'] = $name;
         }
 
-        if (!empty($content)) {
+        if ($content !== '' && $content !== '0') {
             $query['content'] = $content;
         }
 
-        if (!empty($order)) {
+        if ($order !== '' && $order !== '0') {
             $query['order'] = $order;
         }
 
-        if (!empty($direction)) {
+        if ($direction !== '' && $direction !== '0') {
             $query['direction'] = $direction;
         }
 
         $user = $this->adapter->get('zones/' . $zoneID . '/dns_records', $query);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
 
-    public function getRecordDetails(string $zoneID, string $recordID): \stdClass
+    public function getRecordDetails(string $zoneID, string $recordID): stdClass
     {
         $user = $this->adapter->get('zones/' . $zoneID . '/dns_records/' . $recordID);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
         return $this->body->result;
     }
 
     public function getRecordID(string $zoneID, string $type = '', string $name = ''): string
     {
         $records = $this->listRecords($zoneID, $type, $name);
-        if (isset($records->result[0]->id)) {
-            return $records->result[0]->id;
-        }
-        return false;
+        return $records->result[0]->id ?? false;
     }
 
-    public function updateRecordDetails(string $zoneID, string $recordID, array $details): \stdClass
+    public function updateRecordDetails(string $zoneID, string $recordID, array $details): stdClass
     {
         $response = $this->adapter->put('zones/' . $zoneID . '/dns_records/' . $recordID, $details);
-        $this->body = json_decode($response->getBody());
+        $this->body = \json_decode($response->getBody());
         return $this->body;
     }
 
@@ -145,12 +127,7 @@ class DNS implements API
     {
         $user = $this->adapter->delete('zones/' . $zoneID . '/dns_records/' . $recordID);
 
-        $this->body = json_decode($user->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($user->getBody());
+        return isset($this->body->result->id);
     }
 }

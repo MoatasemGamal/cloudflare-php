@@ -1,16 +1,20 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Configurations\ZoneLockdown;
+
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 05/09/2017
- * Time: 13:50
+ * Time: 13:50.
  */
 class ConfigurationsZoneLockdownTest extends TestCase
 {
-    public function testGetArray()
+    public function testGetArray(): void
     {
-        $configuration = new \Cloudflare\API\Configurations\ZoneLockdown();
+        $configuration = new ZoneLockdown();
         $configuration->addIP('1.2.3.4');
 
         $array = $configuration->getArray();

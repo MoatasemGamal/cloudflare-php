@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 04/09/2017
- * Time: 19:55
+ * Time: 19:55.
  */
 
 namespace Cloudflare\API\Auth;

@@ -1,0 +1,35 @@
+parameters:
+    level: 9
+    paths:
+        - src
+        - tests
+    excludePaths:
+        - vendor
+    
+    # Stricter analysis
+    checkMissingIterableValueType: true
+    checkGenericClassInNonGenericObjectType: true
+    checkBenevolentUnionTypes: true
+    
+    # Report unused public methods and properties
+    checkUninitializedProperties: true
+    checkTooWideReturnTypesInProtectedAndPublicMethods: true
+    checkMissingOverrideMethodAttribute: true
+    
+    # Error format
+    errorFormat: table
+    
+    # Ignore errors (add as needed during refactoring)
+    ignoreErrors:
+        # Temporary ignores can be added here during migration
+        # - '#.*#'
+    
+    # Parallel processing
+    parallel:
+        jobSize: 20
+        maximumNumberOfProcesses: 32
+        minimumNumberOfJobsPerProcess: 2
+    
+    # Bootstrap file if needed
+    # bootstrapFiles:
+    #     - tests/bootstrap.php

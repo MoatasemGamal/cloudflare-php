@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
 
 class Crypto implements API
 {
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private readonly Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
@@ -19,12 +18,12 @@ class Crypto implements API
      * @param string $zoneID The ID of the zone
      * @return string|false
      */
-    public function getOpportunisticEncryptionSetting(string $zoneID)
+    public function getOpportunisticEncryptionSetting(string $zoneID): string|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/opportunistic_encryption'
+            'zones/' . $zoneID . '/settings/opportunistic_encryption',
         );
-        $body = json_decode($return->getBody());
+        $body = \json_decode($return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -37,59 +36,48 @@ class Crypto implements API
      * @param string $zoneID The ID of the zone
      * @return string|false
      */
-    public function getOnionRoutingSetting(string $zoneID)
+    public function getOnionRoutingSetting(string $zoneID): string|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/opportunistic_onion'
+            'zones/' . $zoneID . '/settings/opportunistic_onion',
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->result)) {
-            return $body->result;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return $body->result ?? false;
     }
 
     /**
-     * Update the Oppurtunistic Encryption setting for the zone
+     * Update the Oppurtunistic Encryption setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $value The value of the zone setting
-     * @return bool
      */
-    public function updateOpportunisticEncryptionSetting(string $zoneID, string $value)
+    public function updateOpportunisticEncryptionSetting(string $zoneID, string $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/opportunistic_encryption',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Update the Onion Routing setting for the zone
+     * Update the Onion Routing setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $value The value of the zone setting
-     * @return bool
      */
-    public function updateOnionRoutingSetting(string $zoneID, string $value)
+    public function updateOnionRoutingSetting(string $zoneID, string $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/opportunistic_onion',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 }

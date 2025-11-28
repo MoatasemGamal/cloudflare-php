@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
@@ -8,7 +10,7 @@ use TestCase;
 
 class AccountRolesTest extends TestCase
 {
-    public function testListAccountRoles()
+    public function testListAccountRoles(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listAccountRoles.json');
 
@@ -19,7 +21,7 @@ class AccountRolesTest extends TestCase
             ->method('get')
             ->with($this->equalTo('accounts/023e105f4ecef8ad9ca31a8372d0c353/roles'));
 
-        $roles  = new AccountRoles($adapter);
+        $roles = new AccountRoles($adapter);
         $result = $roles->listAccountRoles('023e105f4ecef8ad9ca31a8372d0c353');
 
         $this->assertObjectHasAttribute('result', $result);

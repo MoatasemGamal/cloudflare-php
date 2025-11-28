@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Configurations\LoadBalancer;
 use Cloudflare\API\Endpoints\LoadBalancers;
@@ -12,12 +14,12 @@ use Cloudflare\API\Endpoints\LoadBalancers;
 
 class LoadBalancersTest extends TestCase
 {
-    public function testCreateLoadBalancer()
+    public function testCreateLoadBalancer(): void
     {
         $pools = [
             '17b5962d775c646f3f9725cbc7a53df4',
             '9290f38c5d07c2e2f4df57b1f61d4196',
-            '00920f38ce07c2e2f4df50b1f61d4194'
+            '00920f38ce07c2e2f4df50b1f61d4194',
         ];
 
         $lbConfiguration = new LoadBalancer('www.example.com', $pools, '17b5962d775c646f3f9725cbc7a53df4');
@@ -31,7 +33,7 @@ class LoadBalancersTest extends TestCase
             ->method('post')
             ->with(
                 $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers'),
-                $lbConfiguration->getArray()
+                $lbConfiguration->getArray(),
             );
 
         $loadBalancers = new LoadBalancers($mock);
@@ -41,7 +43,7 @@ class LoadBalancersTest extends TestCase
         $this->assertEquals('699d98642c564d2e855e9661899b7252', $loadBalancers->getBody()->result->id);
     }
 
-    public function testListLoadBalancer()
+    public function testListLoadBalancer(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listLoadBalancers.json');
 
@@ -51,7 +53,7 @@ class LoadBalancersTest extends TestCase
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers')
+                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers'),
             );
 
         $loadBalancers = new LoadBalancers($mock);
@@ -59,7 +61,7 @@ class LoadBalancersTest extends TestCase
         $this->assertEquals('699d98642c564d2e855e9661899b7252', $loadBalancers->getBody()->result[0]->id);
     }
 
-    public function testGetLoadBalancerDetails()
+    public function testGetLoadBalancerDetails(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getLoadBalancerDetails.json');
 
@@ -69,7 +71,7 @@ class LoadBalancersTest extends TestCase
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252')
+                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252'),
             );
 
         $loadBalancers = new LoadBalancers($mock);
@@ -77,12 +79,12 @@ class LoadBalancersTest extends TestCase
         $this->assertEquals('699d98642c564d2e855e9661899b7252', $loadBalancers->getBody()->result->id);
     }
 
-    public function testUpdateLoadBalancer()
+    public function testUpdateLoadBalancer(): void
     {
         $pools = [
             '17b5962d775c646f3f9725cbc7a53df4',
             '9290f38c5d07c2e2f4df57b1f61d4196',
-            '00920f38ce07c2e2f4df50b1f61d4194'
+            '00920f38ce07c2e2f4df50b1f61d4194',
         ];
 
         $lbConfiguration = new LoadBalancer('www.example.com', $pools, '17b5962d775c646f3f9725cbc7a53df4');
@@ -96,7 +98,7 @@ class LoadBalancersTest extends TestCase
             ->method('put')
             ->with(
                 $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252'),
-                $this->equalTo($lbConfiguration->getArray())
+                $this->equalTo($lbConfiguration->getArray()),
             );
 
         $loadBalancers = new LoadBalancers($mock);
@@ -106,7 +108,7 @@ class LoadBalancersTest extends TestCase
         $this->assertEquals('699d98642c564d2e855e9661899b7252', $loadBalancers->getBody()->result->id);
     }
 
-    public function testDeleteLoadBalancer()
+    public function testDeleteLoadBalancer(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteLoadBalancer.json');
 
@@ -116,7 +118,7 @@ class LoadBalancersTest extends TestCase
         $mock->expects($this->once())
             ->method('delete')
             ->with(
-                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252')
+                $this->equalTo('zones/699d98642c564d2e855e9661899b7252/load_balancers/699d98642c564d2e855e9661899b7252'),
             );
 
         $loadBalancers = new LoadBalancers($mock);

@@ -1,7 +1,9 @@
 <?php
 
-use Cloudflare\API\Adapter\ResponseException;
+declare(strict_types=1);
+
 use Cloudflare\API\Adapter\JSONException;
+use Cloudflare\API\Adapter\ResponseException;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
@@ -11,7 +13,7 @@ use GuzzleHttp\Psr7\Response;
  */
 class ResponseExceptionTest extends TestCase
 {
-    public function testFromRequestExceptionNoResponse()
+    public function testFromRequestExceptionNoResponse(): void
     {
         $reqErr = new RequestException('foo', new Request('GET', '/test'));
         $respErr = ResponseException::fromRequestException($reqErr);
@@ -22,7 +24,7 @@ class ResponseExceptionTest extends TestCase
         $this->assertEquals($reqErr, $respErr->getPrevious());
     }
 
-    public function testFromRequestExceptionEmptyContentType()
+    public function testFromRequestExceptionEmptyContentType(): void
     {
         $resp = new Response(404);
         $reqErr = new RequestException('foo', new Request('GET', '/test'), $resp);
@@ -34,8 +36,7 @@ class ResponseExceptionTest extends TestCase
         $this->assertEquals($reqErr, $respErr->getPrevious());
     }
 
-
-    public function testFromRequestExceptionUnknownContentType()
+    public function testFromRequestExceptionUnknownContentType(): void
     {
         $resp = new Response(404, ['Content-Type' => ['application/octet-stream']]);
         $reqErr = new RequestException('foo', new Request('GET', '/test'), $resp);
@@ -47,7 +48,7 @@ class ResponseExceptionTest extends TestCase
         $this->assertEquals($reqErr, $respErr->getPrevious());
     }
 
-    public function testFromRequestExceptionJSONDecodeError()
+    public function testFromRequestExceptionJSONDecodeError(): void
     {
         $resp = new Response(404, ['Content-Type' => ['application/json; charset=utf-8']], '[what]');
         $reqErr = new RequestException('foo', new Request('GET', '/test'), $resp);
@@ -60,7 +61,7 @@ class ResponseExceptionTest extends TestCase
         $this->assertEquals($reqErr, $respErr->getPrevious()->getPrevious());
     }
 
-    public function testFromRequestExceptionJSONWithErrors()
+    public function testFromRequestExceptionJSONWithErrors(): void
     {
         $body = '{
           "result": null,

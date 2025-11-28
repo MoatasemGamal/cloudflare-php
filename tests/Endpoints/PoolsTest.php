@@ -1,6 +1,9 @@
 <?php
 
+declare(strict_types=1);
+
 use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Configurations\Pool;
 use Cloudflare\API\Endpoints\Pools;
 
 /**
@@ -11,18 +14,18 @@ use Cloudflare\API\Endpoints\Pools;
 
 class PoolsTest extends TestCase
 {
-    public function testCreatePool()
+    public function testCreatePool(): void
     {
         $origins = [
             [
                 'name' => 'app-server-1',
                 'address' => '0.0.0.0',
                 'enabled' => true,
-                'weight' => 0.56
-            ]
+                'weight' => 0.56,
+            ],
         ];
 
-        $poolConfiguration = new \Cloudflare\API\Configurations\Pool('primary-dc-1', $origins);
+        $poolConfiguration = new Pool('primary-dc-1', $origins);
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createPool.json');
 
@@ -33,7 +36,7 @@ class PoolsTest extends TestCase
             ->method('post')
             ->with(
                 $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools'),
-                $poolConfiguration->getArray()
+                $poolConfiguration->getArray(),
             );
 
         $pools = new Pools($mock);
@@ -43,7 +46,7 @@ class PoolsTest extends TestCase
         $this->assertEquals('17b5962d775c646f3f9725cbc7a53df4', $pools->getBody()->result->id);
     }
 
-    public function testListPools()
+    public function testListPools(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listPools.json');
 
@@ -53,7 +56,7 @@ class PoolsTest extends TestCase
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools')
+                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools'),
             );
 
         $pools = new Pools($mock);
@@ -61,7 +64,7 @@ class PoolsTest extends TestCase
         $this->assertEquals('17b5962d775c646f3f9725cbc7a53df4', $pools->getBody()->result[0]->id);
     }
 
-    public function testGetPoolDetails()
+    public function testGetPoolDetails(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getPoolDetails.json');
 
@@ -71,7 +74,7 @@ class PoolsTest extends TestCase
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4')
+                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4'),
             );
 
         $pools = new Pools($mock);
@@ -79,18 +82,18 @@ class PoolsTest extends TestCase
         $this->assertEquals('17b5962d775c646f3f9725cbc7a53df4', $pools->getBody()->result->id);
     }
 
-    public function testUpdatePool()
+    public function testUpdatePool(): void
     {
         $origins = [
             [
                 'name' => 'app-server-1',
                 'address' => '0.0.0.0',
                 'enabled' => true,
-                'weight' => 0.56
-            ]
+                'weight' => 0.56,
+            ],
         ];
 
-        $poolConfiguration = new \Cloudflare\API\Configurations\Pool('primary-dc-1', $origins);
+        $poolConfiguration = new Pool('primary-dc-1', $origins);
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updatePool.json');
 
@@ -101,7 +104,7 @@ class PoolsTest extends TestCase
             ->method('put')
             ->with(
                 $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4'),
-                $this->equalTo($poolConfiguration->getArray())
+                $this->equalTo($poolConfiguration->getArray()),
             );
 
         $pools = new Pools($mock);
@@ -111,7 +114,7 @@ class PoolsTest extends TestCase
         $this->assertEquals('17b5962d775c646f3f9725cbc7a53df4', $pools->getBody()->result->id);
     }
 
-    public function testDeletePool()
+    public function testDeletePool(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deletePool.json');
 
@@ -121,7 +124,7 @@ class PoolsTest extends TestCase
         $mock->expects($this->once())
             ->method('delete')
             ->with(
-                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4')
+                $this->equalTo('accounts/01a7362d577a6c3019a474fd6f485823/load_balancers/pools/17b5962d775c646f3f9725cbc7a53df4'),
             );
 
         $pools = new Pools($mock);

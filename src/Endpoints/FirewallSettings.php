@@ -1,16 +1,15 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
 
 class FirewallSettings implements API
 {
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private readonly Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
@@ -19,12 +18,12 @@ class FirewallSettings implements API
      * @param string $zoneID The ID of the zone
      * @return string|false
      */
-    public function getSecurityLevelSetting(string $zoneID)
+    public function getSecurityLevelSetting(string $zoneID): string|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/security_level'
+            'zones/' . $zoneID . '/settings/security_level',
         );
-        $body = json_decode($return->getBody());
+        $body = \json_decode($return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -37,12 +36,12 @@ class FirewallSettings implements API
      * @param string $zoneID The ID of the zone
      * @return integer|false
      */
-    public function getChallengeTTLSetting(string $zoneID)
+    public function getChallengeTTLSetting(string $zoneID): int|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/challenge_ttl'
+            'zones/' . $zoneID . '/settings/challenge_ttl',
         );
-        $body = json_decode($return->getBody());
+        $body = \json_decode($return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -55,12 +54,12 @@ class FirewallSettings implements API
      * @param string $zoneID The ID of the zone
      * @return string|false
      */
-    public function getBrowserIntegrityCheckSetting(string $zoneID)
+    public function getBrowserIntegrityCheckSetting(string $zoneID): string|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/browser_check'
+            'zones/' . $zoneID . '/settings/browser_check',
         );
-        $body = json_decode($return->getBody());
+        $body = \json_decode($return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -68,68 +67,56 @@ class FirewallSettings implements API
     }
 
     /**
-     * Update the Security Level setting for the zone
+     * Update the Security Level setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $value The value of the zone setting
-     * @return bool
      */
-    public function updateSecurityLevelSetting(string $zoneID, string $value)
+    public function updateSecurityLevelSetting(string $zoneID, string $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/security_level',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Update the Challenge TTL setting for the zone
+     * Update the Challenge TTL setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param int $value The value of the zone setting
-     * @return bool
      */
-    public function updateChallengeTTLSetting(string $zoneID, int $value)
+    public function updateChallengeTTLSetting(string $zoneID, int $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/challenge_ttl',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Update the Browser Integrity Check setting for the zone
+     * Update the Browser Integrity Check setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $value The value of the zone setting
-     * @return bool
      */
-    public function updateBrowserIntegrityCheckSetting(string $zoneID, string $value)
+    public function updateBrowserIntegrityCheckSetting(string $zoneID, string $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/browser_check',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 }

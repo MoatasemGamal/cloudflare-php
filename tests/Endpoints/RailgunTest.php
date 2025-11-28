@@ -1,14 +1,19 @@
 <?php
+
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Endpoints\Railgun;
+
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 23/10/2017
- * Time: 11:20
+ * Time: 11:20.
  */
-
 class RailgunTest extends TestCase
 {
-    public function testcreate()
+    public function testcreate(): void
     {
         $details = [
             'name' => 'My Railgun',
@@ -16,17 +21,17 @@ class RailgunTest extends TestCase
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createRailgun.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('post')
             ->with(
                 $this->equalTo('railguns'),
-                $this->equalTo(['name' => $details['name']])
+                $this->equalTo(['name' => $details['name']]),
             );
 
-        $railgun = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $railgun = new Railgun($mock);
         $result = $railgun->create($details['name']);
 
         $this->assertObjectHasAttribute('result', $result);
@@ -37,11 +42,11 @@ class RailgunTest extends TestCase
         $this->assertEquals('e928d310693a83094309acf9ead50448', $railgun->getBody()->result->id);
     }
 
-    public function testlist()
+    public function testlist(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listRailguns.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -51,11 +56,11 @@ class RailgunTest extends TestCase
                 $this->equalTo([
                     'page' => 1,
                     'per_page' => 20,
-                    'direction' => 'desc'
-                ])
+                    'direction' => 'desc',
+                ]),
             );
 
-        $railgun = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $railgun = new Railgun($mock);
         $result = $railgun->list(1, 20, 'desc');
 
         $this->assertObjectHasAttribute('result', $result);
@@ -63,40 +68,40 @@ class RailgunTest extends TestCase
         $this->assertEquals('e928d310693a83094309acf9ead50448', $railgun->getBody()->result[0]->id);
     }
 
-    public function testget()
+    public function testget(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getRailgun.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('railguns/e928d310693a83094309acf9ead50448')
+                $this->equalTo('railguns/e928d310693a83094309acf9ead50448'),
             );
 
-        $railgun = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $railgun = new Railgun($mock);
         $result = $railgun->get('e928d310693a83094309acf9ead50448');
 
         $this->assertEquals('e928d310693a83094309acf9ead50448', $result->id);
         $this->assertEquals('e928d310693a83094309acf9ead50448', $railgun->getBody()->result->id);
     }
 
-    public function testgetZones()
+    public function testgetZones(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listRailgunZones.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('railguns/e928d310693a83094309acf9ead50448/zones')
+                $this->equalTo('railguns/e928d310693a83094309acf9ead50448/zones'),
             );
 
-        $railgun = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $railgun = new Railgun($mock);
         $result = $railgun->getZones('e928d310693a83094309acf9ead50448');
 
         $this->assertObjectHasAttribute('result', $result);
@@ -104,11 +109,11 @@ class RailgunTest extends TestCase
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $railgun->getBody()->result[0]->id);
     }
 
-    public function testupdate()
+    public function testupdate(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateRailgun.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('patch')->willReturn($response);
 
         $details = [
@@ -119,30 +124,30 @@ class RailgunTest extends TestCase
             ->method('patch')
             ->with(
                 $this->equalTo('railguns/e928d310693a83094309acf9ead50448'),
-                $this->equalTo($details)
+                $this->equalTo($details),
             );
 
-        $waf = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $waf = new Railgun($mock);
         $result = $waf->update('e928d310693a83094309acf9ead50448', true);
 
         $this->assertEquals('e928d310693a83094309acf9ead50448', $result->id);
         $this->assertEquals('e928d310693a83094309acf9ead50448', $waf->getBody()->result->id);
     }
 
-    public function testdelete()
+    public function testdelete(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteRailgun.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('delete')
             ->with(
-                $this->equalTo('railguns/e928d310693a83094309acf9ead50448')
+                $this->equalTo('railguns/e928d310693a83094309acf9ead50448'),
             );
 
-        $waf = new \Cloudflare\API\Endpoints\Railgun($mock);
+        $waf = new Railgun($mock);
         $waf->delete('e928d310693a83094309acf9ead50448');
         $this->assertEquals('e928d310693a83094309acf9ead50448', $waf->getBody()->result->id);
     }

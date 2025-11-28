@@ -7,7 +7,7 @@ use Cloudflare\API\Endpoints\ZoneSettings;
 
 class ZoneSettingsTest extends TestCase
 {
-    public function testGetServerSideExcludeSetting()
+    public function testGetServerSideExcludeSetting(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getServerSideExclude.json');
 
@@ -22,7 +22,7 @@ class ZoneSettingsTest extends TestCase
         $this->assertSame('on', $result);
     }
 
-    public function testUpdateServerSideExcludeSetting()
+    public function testUpdateServerSideExcludeSetting(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateServerSideExclude.json');
 
@@ -37,7 +37,7 @@ class ZoneSettingsTest extends TestCase
         $this->assertSame('on', $result);
     }
 
-    public function testGetBrowserCacheTtlSetting()
+    public function testGetBrowserCacheTtlSetting(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getBrowserCacheTtlSetting.json');
 
@@ -52,7 +52,7 @@ class ZoneSettingsTest extends TestCase
         $this->assertSame(14400, $result);
     }
 
-    public function testUpdateBrowserCacheTtlSetting()
+    public function testUpdateBrowserCacheTtlSetting(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateBrowserCacheTtlSetting.json');
 

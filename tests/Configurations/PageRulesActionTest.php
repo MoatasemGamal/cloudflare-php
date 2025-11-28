@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 use Cloudflare\API\Configurations\PageRulesActions;
 
 class PageRulesActionTest extends TestCase
 {
-    public function testForwardingURLConfigurationIsApplied()
+    public function testForwardingURLConfigurationIsApplied(): void
     {
         $identifier = 'forwarding_url';
         $statusCode = 301;

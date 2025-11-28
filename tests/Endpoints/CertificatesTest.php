@@ -1,14 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Configurations\Certificate;
 use Cloudflare\API\Endpoints\Certificates;
 
 class CertificatesTest extends TestCase
 {
-    public function testListCertificates()
+    public function testListCertificates(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listCertificates.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -18,8 +22,8 @@ class CertificatesTest extends TestCase
                 $this->equalTo(
                     [
                         'zone_id' => '023e105f4ecef8ad9ca31a8372d0c353',
-                    ]
-                )
+                    ],
+                ),
             );
 
         $certEndpoint = new Certificates($mock);
@@ -36,11 +40,11 @@ class CertificatesTest extends TestCase
         $this->assertEquals('some-csr-data', $cert->csr);
     }
 
-    public function testGetCertificate()
+    public function testGetCertificate(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -48,13 +52,13 @@ class CertificatesTest extends TestCase
             ->with(
                 $this->equalTo('certificates/6666699999996666699999999966666666'),
                 $this->equalTo(['zone_id' => '023e105f4ecef8ad9ca31a8372d0c353']),
-                $this->equalTo([])
+                $this->equalTo([]),
             );
 
         $certEndpoint = new Certificates($mock);
         $response = $certEndpoint->getCertificate(
             '6666699999996666699999999966666666',
-            '023e105f4ecef8ad9ca31a8372d0c353'
+            '023e105f4ecef8ad9ca31a8372d0c353',
         );
 
         $this->assertObjectHasAttribute('result', $response);
@@ -67,11 +71,11 @@ class CertificatesTest extends TestCase
         $this->assertEquals('some-csr-data-foobar', $cert->csr);
     }
 
-    public function testRevokeCertificate()
+    public function testRevokeCertificate(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
@@ -79,29 +83,29 @@ class CertificatesTest extends TestCase
             ->with(
                 $this->equalTo('certificates/11112222233333444455555'),
                 $this->equalTo(['zone_id' => '023e105f4ecef8ad9ca31a8372d0c353']),
-                $this->equalTo([])
+                $this->equalTo([]),
             );
 
         $certEndpoint = new Certificates($mock);
         $result = $certEndpoint->revokeCertificate(
             '11112222233333444455555',
-            '023e105f4ecef8ad9ca31a8372d0c353'
+            '023e105f4ecef8ad9ca31a8372d0c353',
         );
 
         $this->assertTrue($result);
     }
 
-    public function testCreateCertificate()
+    public function testCreateCertificate(): void
     {
-        $certificate = new \Cloudflare\API\Configurations\Certificate();
+        $certificate = new Certificate();
         $certificate->setHostnames(['foo.example.com', 'bar.exapmle.com']);
-        $certificate->setRequestType(\Cloudflare\API\Configurations\Certificate::ORIGIN_ECC);
+        $certificate->setRequestType(Certificate::ORIGIN_ECC);
         $certificate->setRequestedValidity(365);
         $certificate->setCsr('some-csr-data-barbar');
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getCertificate.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -109,7 +113,7 @@ class CertificatesTest extends TestCase
             ->with(
                 $this->equalTo('certificates'),
                 $this->equalTo($certificate->getArray()),
-                $this->equalTo([])
+                $this->equalTo([]),
             );
 
         $certEndpoint = new Certificates($mock);

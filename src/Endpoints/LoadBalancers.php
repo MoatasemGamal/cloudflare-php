@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne
@@ -16,44 +18,29 @@ class LoadBalancers implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
-    /**
-     * @param string $zoneID
-     * @return mixed
-     */
-    public function listLoadBalancers(string $zoneID)
+    public function listLoadBalancers(string $zoneID): mixed
     {
         $loadBalancers = $this->adapter->get('zones/' . $zoneID . '/load_balancers');
-        $this->body = json_decode($loadBalancers->getBody());
+        $this->body = \json_decode($loadBalancers->getBody());
 
         return $this->body->result;
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $loadBalancerID
-     * @return mixed
-     */
-    public function getLoadBalancerDetails(string $zoneID, string $loadBalancerID)
+    public function getLoadBalancerDetails(string $zoneID, string $loadBalancerID): mixed
     {
         $loadBalancer = $this->adapter->get('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID);
-        $this->body = json_decode($loadBalancer->getBody());
+        $this->body = \json_decode($loadBalancer->getBody());
         return $this->body->result;
     }
 
     /**
-     * @param string $zoneID
-     * @param string $loadBalancerID
-     * @return LoadBalancer
      * @throws ConfigurationsException
      */
-    public function getLoadBalancerConfiguration(string $zoneID, string $loadBalancerID)
+    public function getLoadBalancerConfiguration(string $zoneID, string $loadBalancerID): LoadBalancer
     {
         $loadBalancer = $this->getLoadBalancerDetails($zoneID, $loadBalancerID);
 
@@ -65,7 +52,7 @@ class LoadBalancers implements API
             $lbConfiguration->disable();
         }
 
-        if (is_array($loadBalancer->pop_pools)) {
+        if (\is_array($loadBalancer->pop_pools)) {
             $lbConfiguration->setPopPools($loadBalancer->pop_pools);
         }
 
@@ -73,7 +60,7 @@ class LoadBalancers implements API
             $lbConfiguration->setTtl($loadBalancer->ttl);
         }
 
-        if (is_array($loadBalancer->region_pools)) {
+        if (\is_array($loadBalancer->region_pools)) {
             $lbConfiguration->setRegionPools($loadBalancer->region_pools);
         }
         $lbConfiguration->setSessionAffinity($loadBalancer->session_affinity);
@@ -91,67 +78,36 @@ class LoadBalancers implements API
         return $lbConfiguration;
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $loadBalancerID
-     * @param LoadBalancer $lbConfiguration
-     * @return bool
-     */
     public function updateLoadBalancer(
         string $zoneID,
         string $loadBalancerID,
-        LoadBalancer $lbConfiguration
+        LoadBalancer $lbConfiguration,
     ): bool {
         $options = $lbConfiguration->getArray();
 
         $query = $this->adapter->put('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID, $options);
 
-        $this->body = json_decode($query->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($query->getBody());
+        return isset($this->body->result->id);
     }
 
-    /**
-     * @param string $zoneID
-     * @param LoadBalancer $lbConfiguration
-     * @return bool
-     */
     public function createLoadBalancer(
         string $zoneID,
-        LoadBalancer $lbConfiguration
+        LoadBalancer $lbConfiguration,
     ): bool {
         $options = $lbConfiguration->getArray();
 
         $query = $this->adapter->post('zones/' . $zoneID . '/load_balancers', $options);
 
-        $this->body = json_decode($query->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($query->getBody());
+        return isset($this->body->result->id);
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $loadBalancerID
-     * @return bool
-     */
     public function deleteLoadBalancer(string $zoneID, string $loadBalancerID): bool
     {
         $loadBalancer = $this->adapter->delete('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID);
 
-        $this->body = json_decode($loadBalancer->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($loadBalancer->getBody());
+        return isset($this->body->result->id);
     }
 }

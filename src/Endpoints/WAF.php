@@ -1,25 +1,25 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 23/10/2017
- * Time: 11:17
+ * Time: 11:17.
  */
 
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Traits\BodyAccessorTrait;
+use stdClass;
 
 class WAF implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     public function getPackages(
@@ -28,35 +28,34 @@ class WAF implements API
         int $perPage = 20,
         string $order = '',
         string $direction = '',
-        string $match = 'all'
-    ): \stdClass {
+        string $match = 'all',
+    ): stdClass {
         $query = [
             'page' => $page,
             'per_page' => $perPage,
-            'match' => $match
+            'match' => $match,
         ];
 
-        if (!empty($order)) {
+        if ($order !== '' && $order !== '0') {
             $query['order'] = $order;
         }
 
-        if (!empty($direction)) {
+        if ($direction !== '' && $direction !== '0') {
             $query['direction'] = $direction;
         }
 
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages', $query);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
 
-
     public function getPackageInfo(
         string $zoneID,
-        string $packageID
-    ): \stdClass {
+        string $packageID,
+    ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return $this->body->result;
     }
@@ -68,23 +67,23 @@ class WAF implements API
         int $perPage = 20,
         string $order = '',
         string $direction = '',
-        string $match = 'all'
-    ): \stdClass {
+        string $match = 'all',
+    ): stdClass {
         $query = [
             'page' => $page,
             'per_page' => $perPage,
-            'match' => $match
+            'match' => $match,
         ];
 
-        if (!empty($order)) {
+        if ($order !== '' && $order !== '0') {
             $query['order'] = $order;
         }
 
-        if (!empty($direction)) {
+        if ($direction !== '' && $direction !== '0') {
             $query['direction'] = $direction;
         }
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules', $query);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -92,10 +91,10 @@ class WAF implements API
     public function getRuleInfo(
         string $zoneID,
         string $packageID,
-        string $ruleID
-    ): \stdClass {
+        string $ruleID,
+    ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules/' . $ruleID);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return $this->body->result;
     }
@@ -104,17 +103,17 @@ class WAF implements API
         string $zoneID,
         string $packageID,
         string $ruleID,
-        string $status
-    ): \stdClass {
+        string $status,
+    ): stdClass {
         $query = [
             'mode' => $status,
         ];
 
         $user = $this->adapter->patch(
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules/' . $ruleID,
-            $query
+            $query,
         );
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return $this->body->result;
     }
@@ -126,27 +125,27 @@ class WAF implements API
         int $perPage = 20,
         string $order = '',
         string $direction = '',
-        string $match = 'all'
-    ): \stdClass {
+        string $match = 'all',
+    ): stdClass {
         $query = [
             'page' => $page,
             'per_page' => $perPage,
-            'match' => $match
+            'match' => $match,
         ];
 
-        if (!empty($order)) {
+        if ($order !== '' && $order !== '0') {
             $query['order'] = $order;
         }
 
-        if (!empty($direction)) {
+        if ($direction !== '' && $direction !== '0') {
             $query['direction'] = $direction;
         }
 
         $user = $this->adapter->get(
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups',
-            $query
+            $query,
         );
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -154,10 +153,10 @@ class WAF implements API
     public function getGroupInfo(
         string $zoneID,
         string $packageID,
-        string $groupID
-    ): \stdClass {
+        string $groupID,
+    ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups/' . $groupID);
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return $this->body->result;
     }
@@ -166,17 +165,17 @@ class WAF implements API
         string $zoneID,
         string $packageID,
         string $groupID,
-        string $status
-    ): \stdClass {
+        string $status,
+    ): stdClass {
         $query = [
-            'mode' => $status
+            'mode' => $status,
         ];
 
         $user = $this->adapter->patch(
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups/' . $groupID,
-            $query
+            $query,
         );
-        $this->body = json_decode($user->getBody());
+        $this->body = \json_decode($user->getBody());
 
         return $this->body->result;
     }

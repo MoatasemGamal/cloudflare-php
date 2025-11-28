@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cloudflare\API\Configurations;
 
 class DNSAnalytics implements Configurations
@@ -11,58 +13,58 @@ class DNSAnalytics implements Configurations
         return $this->configs;
     }
 
-    public function setDimensions(array $dimensions)
+    public function setDimensions(array $dimensions): void
     {
-        if (count($dimensions) !== 0) {
-            $this->configs['dimensions'] = implode(',', $dimensions);
+        if ($dimensions !== []) {
+            $this->configs['dimensions'] = \implode(',', $dimensions);
         }
     }
 
-    public function setMetrics(array $metrics)
+    public function setMetrics(array $metrics): void
     {
-        if (count($metrics) !== 0) {
-            $this->configs['metrics'] = implode(',', $metrics);
+        if ($metrics !== []) {
+            $this->configs['metrics'] = \implode(',', $metrics);
         }
     }
 
-    public function setSince(string $since)
+    public function setSince(string $since): void
     {
-        if ($since) {
+        if ($since !== '' && $since !== '0') {
             $this->configs['since'] = $since;
         }
     }
 
-    public function setUntil(string $until)
+    public function setUntil(string $until): void
     {
-        if ($until) {
+        if ($until !== '' && $until !== '0') {
             $this->configs['until'] = $until;
         }
     }
 
-    public function setSorting(array $sorting)
+    public function setSorting(array $sorting): void
     {
-        if (count($sorting) !== 0) {
-            $this->configs['sort'] = implode(',', $sorting);
+        if ($sorting !== []) {
+            $this->configs['sort'] = \implode(',', $sorting);
         }
     }
 
-    public function setFilters(string $filters)
+    public function setFilters(string $filters): void
     {
-        if ($filters) {
+        if ($filters !== '' && $filters !== '0') {
             $this->configs['filters'] = $filters;
         }
     }
 
-    public function setLimit(int $limit)
+    public function setLimit(int $limit): void
     {
-        if ($limit) {
+        if ($limit !== 0) {
             $this->configs['limit'] = $limit;
         }
     }
 
-    public function setTimeDelta(string $timeDelta)
+    public function setTimeDelta(string $timeDelta): void
     {
-        if ($timeDelta) {
+        if ($timeDelta !== '' && $timeDelta !== '0') {
             $this->configs['time_delta'] = $timeDelta;
         }
     }

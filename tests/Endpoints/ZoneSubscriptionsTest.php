@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Endpoints\ZoneSubscriptions;
 
 class ZoneSubscriptionsTest extends TestCase
 {
-    public function testListZoneSubscriptions()
+    public function testListZoneSubscriptions(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listZoneSubscriptions.json');
 
@@ -15,7 +17,7 @@ class ZoneSubscriptionsTest extends TestCase
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/subscriptions')
+                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/subscriptions'),
             );
 
         $zoneSubscriptions = new ZoneSubscriptions($mock);
@@ -25,7 +27,7 @@ class ZoneSubscriptionsTest extends TestCase
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $zoneSubscriptions->getBody()->result[0]->zone->id);
     }
 
-    public function testAddZoneSubscriptionIfMissing()
+    public function testAddZoneSubscriptionIfMissing(): void
     {
         $postResponse = $this->getPsr7JsonResponseForFixture('Endpoints/createZoneSubscription.json');
         $getResponse = $this->getPsr7JsonResponseForFixture('Endpoints/listEmptyZoneSubscriptions.json');
@@ -42,7 +44,7 @@ class ZoneSubscriptionsTest extends TestCase
                     'rate_plan' => [
                         'id' => 'PARTNER_PRO',
                     ],
-                ])
+                ]),
             );
 
         $zoneSubscriptions = new ZoneSubscriptions($mock);
@@ -52,7 +54,7 @@ class ZoneSubscriptionsTest extends TestCase
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $zoneSubscriptions->getBody()->result->zone->id);
     }
 
-    public function testAddZoneSubscriptionIfExisting()
+    public function testAddZoneSubscriptionIfExisting(): void
     {
         $postResponse = $this->getPsr7JsonResponseForFixture('Endpoints/createZoneSubscription.json');
         $getResponse = $this->getPsr7JsonResponseForFixture('Endpoints/listZoneSubscriptions.json');
@@ -69,7 +71,7 @@ class ZoneSubscriptionsTest extends TestCase
                     'rate_plan' => [
                         'id' => 'PARTNER_PRO',
                     ],
-                ])
+                ]),
             );
 
         $zoneSubscriptions = new ZoneSubscriptions($mock);

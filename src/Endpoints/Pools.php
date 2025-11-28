@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne
@@ -16,56 +18,36 @@ class Pools implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
-    /**
-     * @param string $accountID
-     * @return mixed
-     */
-    public function listPools(string $accountID)
+    public function listPools(string $accountID): mixed
     {
         $pools = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools');
-        $this->body = json_decode($pools->getBody());
+        $this->body = \json_decode($pools->getBody());
 
         return $this->body->result;
     }
 
-    /**
-     * @param string $accountID
-     * @param string $poolID
-     * @return mixed
-     */
-    public function getPoolDetails(string $accountID, string $poolID)
+    public function getPoolDetails(string $accountID, string $poolID): mixed
     {
         $pool = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools/' . $poolID);
-        $this->body = json_decode($pool->getBody());
+        $this->body = \json_decode($pool->getBody());
         return $this->body->result;
     }
 
-    /**
-     * @param string $accountID
-     * @param string $poolID
-     * @return mixed
-     */
-    public function getPoolHealthDetails(string $accountID, string $poolID)
+    public function getPoolHealthDetails(string $accountID, string $poolID): mixed
     {
         $pool = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools/' . $poolID . '/health');
-        $this->body = json_decode($pool->getBody());
+        $this->body = \json_decode($pool->getBody());
         return $this->body->result;
     }
 
     /**
-     * @param string $accountID
-     * @param string $poolID
-     * @return Pool
      * @throws ConfigurationsException
      */
-    public function getPoolConfiguration(string $accountID, string $poolID)
+    public function getPoolConfiguration(string $accountID, string $poolID): Pool
     {
         $pool = $this->getPoolDetails($accountID, $poolID);
 
@@ -83,74 +65,43 @@ class Pools implements API
         $poolConfiguration->setMonitor($pool->monitor);
         $poolConfiguration->setNotificationEmail($pool->notification_email);
 
-        if (is_array($pool->check_regions)) {
+        if (\is_array($pool->check_regions)) {
             $poolConfiguration->setCheckRegions($pool->check_regions);
         }
 
         return $poolConfiguration;
     }
 
-    /**
-     * @param string $accountID
-     * @param string $poolID
-     * @param Pool $poolConfiguration
-     * @return bool
-     */
     public function updatePool(
         string $accountID,
         string $poolID,
-        Pool $poolConfiguration
+        Pool $poolConfiguration,
     ): bool {
         $options = $poolConfiguration->getArray();
 
         $query = $this->adapter->put('accounts/' . $accountID . '/load_balancers/pools/' . $poolID, $options);
 
-        $this->body = json_decode($query->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($query->getBody());
+        return isset($this->body->result->id);
     }
 
-    /**
-     * @param string $accountID
-     * @param Pool $poolConfiguration
-     * @return bool
-     */
     public function createPool(
         string $accountID,
-        Pool $poolConfiguration
+        Pool $poolConfiguration,
     ): bool {
         $options = $poolConfiguration->getArray();
 
         $query = $this->adapter->post('accounts/' . $accountID . '/load_balancers/pools', $options);
 
-        $this->body = json_decode($query->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($query->getBody());
+        return isset($this->body->result->id);
     }
 
-    /**
-     * @param string $accountID
-     * @param string $poolID
-     * @return bool
-     */
     public function deletePool(string $accountID, string $poolID): bool
     {
         $pool = $this->adapter->delete('accounts/' . $accountID . '/load_balancers/pools/' . $poolID);
 
-        $this->body = json_decode($pool->getBody());
-
-        if (isset($this->body->result->id)) {
-            return true;
-        }
-
-        return false;
+        $this->body = \json_decode($pool->getBody());
+        return isset($this->body->result->id);
     }
 }

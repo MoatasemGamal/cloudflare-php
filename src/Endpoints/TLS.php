@@ -1,9 +1,11 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: Jurgen Coetsiers
  * Date: 21/10/2018
- * Time: 09:10
+ * Time: 09:10.
  */
 
 namespace Cloudflare\API\Endpoints;
@@ -12,25 +14,22 @@ use Cloudflare\API\Adapter\Adapter;
 
 class TLS implements API
 {
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private readonly Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
-     * Get the TLS Client Auth setting for the zone
+     * Get the TLS Client Auth setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @return string|false
      */
-    public function getTLSClientAuth($zoneID)
+    public function getTLSClientAuth(string $zoneID): string|bool
     {
         $return = $this->adapter->get(
-            'zones/' . $zoneID . '/settings/tls_client_auth'
+            'zones/' . $zoneID . '/settings/tls_client_auth',
         );
-        $body   = json_decode($return->getBody());
+        $body = \json_decode($return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -38,84 +37,68 @@ class TLS implements API
     }
 
     /**
-     * Enable TLS 1.3 for the zone
+     * Enable TLS 1.3 for the zone.
      *
      * @param string $zoneID The ID of the zone
-     * @return bool
      */
-    public function enableTLS13($zoneID)
+    public function enableTLS13(string $zoneID): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/tls_1_3',
-            ['value' => 'on']
+            ['value' => 'on'],
         );
-        $body   = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Disable TLS 1.3 for the zone
+     * Disable TLS 1.3 for the zone.
      *
      * @param string $zoneID The ID of the zone
-     * @return bool
      */
-    public function disableTLS13($zoneID)
+    public function disableTLS13(string $zoneID): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/tls_1_3',
-            ['value' => 'off']
+            ['value' => 'off'],
         );
-        $body   = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Update the minimum TLS version setting for the zone
+     * Update the minimum TLS version setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $minimumVersion The version to update to
-     * @return bool
      */
-    public function changeMinimumTLSVersion($zoneID, $minimumVersion)
+    public function changeMinimumTLSVersion(string $zoneID, $minimumVersion): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/min_tls_version',
             [
                 'value' => $minimumVersion,
-            ]
+            ],
         );
-        $body   = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 
     /**
-     * Update the TLS Client Auth setting for the zone
+     * Update the TLS Client Auth setting for the zone.
      *
      * @param string $zoneID The ID of the zone
      * @param string $value The value of the zone setting
-     * @return bool
      */
-    public function updateTLSClientAuth($zoneID, $value)
+    public function updateTLSClientAuth(string $zoneID, $value): bool
     {
         $return = $this->adapter->patch(
             'zones/' . $zoneID . '/settings/tls_client_auth',
             [
                 'value' => $value,
-            ]
+            ],
         );
-        $body   = json_decode($return->getBody());
-        if (isset($body->success) && $body->success == true) {
-            return true;
-        }
-        return false;
+        $body = \json_decode($return->getBody());
+        return isset($body->success) && $body->success === true;
     }
 }

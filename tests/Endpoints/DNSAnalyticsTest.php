@@ -1,21 +1,26 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Endpoints\DNSAnalytics;
+
 /**
  * Created by Visual Studio Code.
  * User: elliot.alderson
  * Date: 10/02/2020
- * Time: 04:28 AM
+ * Time: 04:28 AM.
  */
 class DNSAnalyticsTest extends TestCase
 {
-    public function testGetDNSAnalyticsReportTable()
+    public function testGetDNSAnalyticsReportTable(): void
     {
         $response = $this->getPsr7JsonResponseForFixture(
-            'Endpoints/getDNSAnalyticsReportTable.json'
+            'Endpoints/getDNSAnalyticsReportTable.json',
         );
 
         $mock = $this->getMockBuilder(
-            \Cloudflare\API\Adapter\Adapter::class
+            Adapter::class,
         )->getMock();
         $mock->method('get')->willReturn($response);
 
@@ -24,11 +29,11 @@ class DNSAnalyticsTest extends TestCase
             ->method('get')
             ->with(
                 $this->equalTo(
-                    'zones/023e105f4ecef8ad9ca31a8372d0c353/dns_analytics/report'
-                )
+                    'zones/023e105f4ecef8ad9ca31a8372d0c353/dns_analytics/report',
+                ),
             );
 
-        $analytics = new \Cloudflare\API\Endpoints\DNSAnalytics($mock);
+        $analytics = new DNSAnalytics($mock);
         $since = '2020-02-01T00:00:00Z';
         $until = '2020-02-28T23:59:59Z';
         $filters = 'responseCode==NOERROR AND queryType==A';
@@ -40,7 +45,7 @@ class DNSAnalyticsTest extends TestCase
             ['-queryCount'],
             $filters,
             $since,
-            $until
+            $until,
         );
 
         $this->assertEquals(1, $result->rows);
@@ -48,14 +53,14 @@ class DNSAnalyticsTest extends TestCase
         $this->assertEquals($until, $result->query->until);
     }
 
-    public function testGetDNSAnalyticsReportByTime()
+    public function testGetDNSAnalyticsReportByTime(): void
     {
         $response = $this->getPsr7JsonResponseForFixture(
-            'Endpoints/getDNSAnalyticsReportByTime.json'
+            'Endpoints/getDNSAnalyticsReportByTime.json',
         );
 
         $mock = $this->getMockBuilder(
-            \Cloudflare\API\Adapter\Adapter::class
+            Adapter::class,
         )->getMock();
         $mock->method('get')->willReturn($response);
 
@@ -64,11 +69,11 @@ class DNSAnalyticsTest extends TestCase
             ->method('get')
             ->with(
                 $this->equalTo(
-                    'zones/023e105f4ecef8ad9ca31a8372d0c353/dns_analytics/report/bytime'
-                )
+                    'zones/023e105f4ecef8ad9ca31a8372d0c353/dns_analytics/report/bytime',
+                ),
             );
 
-        $analytics = new \Cloudflare\API\Endpoints\DNSAnalytics($mock);
+        $analytics = new DNSAnalytics($mock);
         $since = '2020-02-01T00:00:00Z';
         $until = '2020-02-28T23:59:59Z';
         $filters = 'responseCode==NOERROR AND queryType==A';
@@ -81,7 +86,7 @@ class DNSAnalyticsTest extends TestCase
             $filters,
             $since,
             $until,
-            2
+            2,
         );
 
         $this->assertEquals(2, $result->rows);

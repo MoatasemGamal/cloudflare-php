@@ -1,95 +1,99 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Guzzle;
 use Cloudflare\API\Adapter\ResponseException;
+use Cloudflare\API\Auth\Auth;
 
 class GuzzleTest extends TestCase
 {
-    private $client;
+    private Guzzle $client;
 
-    public function setUp()
+    public function setUp(): void
     {
-        $auth = $this->getMockBuilder(\Cloudflare\API\Auth\Auth::class)
+        $auth = $this->getMockBuilder(Auth::class)
             ->setMethods(['getHeaders'])
             ->getMock();
 
         $auth->method('getHeaders')
             ->willReturn(['X-Testing' => 'Test']);
 
-        $this->client = new \Cloudflare\API\Adapter\Guzzle($auth, 'https://httpbin.org/');
+        $this->client = new Guzzle($auth, 'https://httpbin.org/');
     }
 
-    public function testGet()
+    public function testGet(): void
     {
         $response = $this->client->get('https://httpbin.org/get');
 
         $headers = $response->getHeaders();
         $this->assertEquals('application/json', $headers['Content-Type'][0]);
 
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Test', $body->headers->{'X-Testing'});
 
         $response = $this->client->get('https://httpbin.org/get', [], ['X-Another-Test' => 'Test2']);
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Test2', $body->headers->{'X-Another-Test'});
     }
 
-    public function testPost()
+    public function testPost(): void
     {
         $response = $this->client->post('https://httpbin.org/post', ['X-Post-Test' => 'Testing a POST request.']);
 
         $headers = $response->getHeaders();
         $this->assertEquals('application/json', $headers['Content-Type'][0]);
 
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Testing a POST request.', $body->json->{'X-Post-Test'});
     }
 
-    public function testPut()
+    public function testPut(): void
     {
         $response = $this->client->put('https://httpbin.org/put', ['X-Put-Test' => 'Testing a PUT request.']);
 
         $headers = $response->getHeaders();
         $this->assertEquals('application/json', $headers['Content-Type'][0]);
 
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Testing a PUT request.', $body->json->{'X-Put-Test'});
     }
 
-    public function testPatch()
+    public function testPatch(): void
     {
         $response = $this->client->patch(
             'https://httpbin.org/patch',
-            ['X-Patch-Test' => 'Testing a PATCH request.']
+            ['X-Patch-Test' => 'Testing a PATCH request.'],
         );
 
         $headers = $response->getHeaders();
         $this->assertEquals('application/json', $headers['Content-Type'][0]);
 
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Testing a PATCH request.', $body->json->{'X-Patch-Test'});
     }
 
-    public function testDelete()
+    public function testDelete(): void
     {
         $response = $this->client->delete(
             'https://httpbin.org/delete',
-            ['X-Delete-Test' => 'Testing a DELETE request.']
+            ['X-Delete-Test' => 'Testing a DELETE request.'],
         );
 
         $headers = $response->getHeaders();
         $this->assertEquals('application/json', $headers['Content-Type'][0]);
 
-        $body = json_decode($response->getBody());
+        $body = json_decode((string) $response->getBody());
         $this->assertEquals('Testing a DELETE request.', $body->json->{'X-Delete-Test'});
     }
 
-    public function testNotFound()
+    public function testNotFound(): void
     {
         $this->expectException(ResponseException::class);
         $this->client->get('https://httpbin.org/status/404');
     }
 
-    public function testServerError()
+    public function testServerError(): void
     {
         $this->expectException(ResponseException::class);
         $this->client->get('https://httpbin.org/status/500');

@@ -1,12 +1,14 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Cloudflare\API\Configurations;
 
 class FirewallRuleOptions implements Configurations
 {
     protected $configs = [
         'paused' => false,
-        'action' => 'block'
+        'action' => 'block',
     ];
 
     public function getArray(): array
@@ -14,32 +16,32 @@ class FirewallRuleOptions implements Configurations
         return $this->configs;
     }
 
-    public function setPaused(bool $paused)
+    public function setPaused(bool $paused): void
     {
         $this->configs['paused'] = $paused;
     }
 
-    public function setActionBlock()
+    public function setActionBlock(): void
     {
         $this->configs['action'] = 'block';
     }
 
-    public function setActionAllow()
+    public function setActionAllow(): void
     {
         $this->configs['action'] = 'allow';
     }
 
-    public function setActionChallenge()
+    public function setActionChallenge(): void
     {
         $this->configs['action'] = 'challenge';
     }
 
-    public function setActionJsChallenge()
+    public function setActionJsChallenge(): void
     {
         $this->configs['action'] = 'js_challenge';
     }
 
-    public function setActionLog()
+    public function setActionLog(): void
     {
         $this->configs['action'] = 'log';
     }

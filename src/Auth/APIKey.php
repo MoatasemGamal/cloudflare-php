@@ -1,28 +1,25 @@
 <?php
+
+declare(strict_types=1);
 /**
  * User: junade
  * Date: 13/01/2017
- * Time: 16:55
+ * Time: 16:55.
  */
 
 namespace Cloudflare\API\Auth;
 
 class APIKey implements Auth
 {
-    private $email;
-    private $apiKey;
-
-    public function __construct(string $email, string $apiKey)
+    public function __construct(private readonly string $email, private readonly string $apiKey)
     {
-        $this->email  = $email;
-        $this->apiKey = $apiKey;
     }
 
     public function getHeaders(): array
     {
         return [
-            'X-Auth-Email'   => $this->email,
-            'X-Auth-Key' => $this->apiKey
+            'X-Auth-Email' => $this->email,
+            'X-Auth-Key' => $this->apiKey,
         ];
     }
 }

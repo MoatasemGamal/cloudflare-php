@@ -1,41 +1,29 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by PhpStorm.
  * User: junade
  * Date: 18/03/2018
- * Time: 21:46
+ * Time: 21:46.
  */
 
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Traits\BodyAccessorTrait;
+use stdClass;
 
 class CustomHostnames implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
-
 
     /**
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
-     *
-     * @param string $zoneID
-     * @param string $hostname
-     * @param string $sslMethod
-     * @param string $sslType
-     * @param array  $sslSettings
-     * @param string $customOriginServer
-     * @param bool   $wildcard
-     * @param string $bundleMethod
-     * @param array $customSsl
-     * @return \stdClass
      */
     public function addHostname(
         string $zoneID,
@@ -46,8 +34,8 @@ class CustomHostnames implements API
         string $customOriginServer = '',
         bool $wildcard = false,
         string $bundleMethod = '',
-        array $customSsl = []
-    ): \stdClass {
+        array $customSsl = [],
+    ): stdClass {
         $options = [
             'hostname' => $hostname,
             'ssl' => [
@@ -58,11 +46,11 @@ class CustomHostnames implements API
             ],
         ];
 
-        if (!empty($customOriginServer)) {
+        if ($customOriginServer !== '' && $customOriginServer !== '0') {
             $options['custom_origin_server'] = $customOriginServer;
         }
 
-        if (!empty($bundleMethod)) {
+        if ($bundleMethod !== '' && $bundleMethod !== '0') {
             $options['ssl']['bundle_method'] = $bundleMethod;
         }
 
@@ -74,22 +62,11 @@ class CustomHostnames implements API
             $options['ssl']['custom_certificate'] = $customSsl['certificate'];
         }
 
-        $zone = $this->adapter->post('zones/'.$zoneID.'/custom_hostnames', $options);
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->post('zones/' . $zoneID . '/custom_hostnames', $options);
+        $this->body = \json_decode($zone->getBody());
         return $this->body->result;
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $hostname
-     * @param string $id
-     * @param int $page
-     * @param int $perPage
-     * @param string $order
-     * @param string $direction
-     * @param int $ssl
-     * @return \stdClass
-     */
     public function listHostnames(
         string $zoneID,
         string $hostname = '',
@@ -98,45 +75,40 @@ class CustomHostnames implements API
         int $perPage = 20,
         string $order = '',
         string $direction = '',
-        int $ssl = 0
-    ): \stdClass {
+        int $ssl = 0,
+    ): stdClass {
         $query = [
             'page' => $page,
             'per_page' => $perPage,
-            'ssl' => $ssl
+            'ssl' => $ssl,
         ];
 
-        if (!empty($hostname)) {
+        if ($hostname !== '' && $hostname !== '0') {
             $query['hostname'] = $hostname;
         }
 
-        if (!empty($hostnameID)) {
+        if ($hostnameID !== '' && $hostnameID !== '0') {
             $query['id'] = $hostnameID;
         }
 
-        if (!empty($order)) {
+        if ($order !== '' && $order !== '0') {
             $query['order'] = $order;
         }
 
-        if (!empty($direction)) {
+        if ($direction !== '' && $direction !== '0') {
             $query['direction'] = $direction;
         }
 
-        $zone = $this->adapter->get('zones/'.$zoneID.'/custom_hostnames', $query);
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames', $query);
+        $this->body = \json_decode($zone->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $hostnameID
-     * @return mixed
-     */
-    public function getHostname(string $zoneID, string $hostnameID)
+    public function getHostname(string $zoneID, string $hostnameID): mixed
     {
-        $zone = $this->adapter->get('zones/'.$zoneID.'/custom_hostnames/'.$hostnameID);
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID);
+        $this->body = \json_decode($zone->getBody());
 
         return $this->body->result;
     }
@@ -145,17 +117,6 @@ class CustomHostnames implements API
      * @SuppressWarnings(PHPMD.BooleanArgumentFlag)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     *
-     * @param string    $zoneID
-     * @param string    $hostnameID
-     * @param string    $sslMethod
-     * @param string    $sslType
-     * @param array     $sslSettings
-     * @param string    $customOriginServer
-     * @param bool|null $wildcard
-     * @param string    $bundleMethod
-     * @param array    $customSsl
-     * @return \stdClass
      */
     public function updateHostname(
         string $zoneID,
@@ -164,30 +125,30 @@ class CustomHostnames implements API
         string $sslType = '',
         array $sslSettings = [],
         string $customOriginServer = '',
-        bool $wildcard = null,
+        ?bool $wildcard = null,
         string $bundleMethod = '',
-        array $customSsl = []
-    ): \stdClass {
+        array $customSsl = [],
+    ): stdClass {
         $query = [];
         $options = [];
 
-        if (!empty($sslMethod)) {
+        if ($sslMethod !== '' && $sslMethod !== '0') {
             $query['method'] = $sslMethod;
         }
 
-        if (!empty($sslType)) {
+        if ($sslType !== '' && $sslType !== '0') {
             $query['type'] = $sslType;
         }
 
-        if (!empty($sslSettings)) {
+        if ($sslSettings !== []) {
             $query['settings'] = $sslSettings;
         }
 
-        if (!is_null($wildcard)) {
+        if (!\is_null($wildcard)) {
             $query['wildcard'] = $wildcard;
         }
 
-        if (!empty($bundleMethod)) {
+        if ($bundleMethod !== '' && $bundleMethod !== '0') {
             $query['bundle_method'] = $bundleMethod;
         }
 
@@ -199,41 +160,32 @@ class CustomHostnames implements API
             $query['custom_certificate'] = $customSsl['certificate'];
         }
 
-        if (!empty($query)) {
+        if ($query !== []) {
             $options = [
-                'ssl' => $query
+                'ssl' => $query,
             ];
         }
 
-        if (!empty($customOriginServer)) {
+        if ($customOriginServer !== '' && $customOriginServer !== '0') {
             $options['custom_origin_server'] = $customOriginServer;
         }
 
-        $zone = $this->adapter->patch('zones/'.$zoneID.'/custom_hostnames/'.$hostnameID, $options);
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->patch('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID, $options);
+        $this->body = \json_decode($zone->getBody());
         return $this->body->result;
     }
 
-    /**
-     * @param string $zoneID
-     * @param string $hostnameID
-     * @return \stdClass
-     */
-    public function deleteHostname(string $zoneID, string $hostnameID): \stdClass
+    public function deleteHostname(string $zoneID, string $hostnameID): stdClass
     {
-        $zone = $this->adapter->delete('zones/'.$zoneID.'/custom_hostnames/'.$hostnameID);
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->delete('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID);
+        $this->body = \json_decode($zone->getBody());
         return $this->body;
     }
 
-    /**
-     * @param string $zoneID
-     * @return \stdClass
-     */
-    public function getFallbackOrigin(string $zoneID): \stdClass
+    public function getFallbackOrigin(string $zoneID): stdClass
     {
-        $zone = $this->adapter->get('zones/'.$zoneID.'/custom_hostnames/fallback_origin');
-        $this->body = json_decode($zone->getBody());
+        $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames/fallback_origin');
+        $this->body = \json_decode($zone->getBody());
 
         return $this->body->result;
     }

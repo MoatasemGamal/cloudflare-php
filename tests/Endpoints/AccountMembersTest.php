@@ -1,11 +1,13 @@
 <?php
 
+declare(strict_types=1);
+
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Endpoints\AccountMembers;
 
 class AccountMembersTest extends TestCase
 {
-    public function testAddAccountMember()
+    public function testAddAccountMember(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createAccountMember.json');
 
@@ -21,7 +23,7 @@ class AccountMembersTest extends TestCase
                     'roles' => [
                         '3536bcfad5faccb999b47003c79917fb',
                     ],
-                ])
+                ]),
             );
 
         $accountMembers = new AccountMembers($mock);
@@ -30,7 +32,7 @@ class AccountMembersTest extends TestCase
         $this->assertEquals('4536bcfad5faccb111b47003c79917fa', $accountMembers->getBody()->result->id);
     }
 
-    public function testListAccountMembers()
+    public function testListAccountMembers(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listAccountMembers.json');
 
@@ -44,7 +46,7 @@ class AccountMembersTest extends TestCase
                 $this->equalTo([
                     'page' => 1,
                     'per_page' => 20,
-                ])
+                ]),
             );
 
         $accountMembers = new AccountMembers($mock);

@@ -1,19 +1,22 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Endpoints\Accounts;
 
 /**
  * User: kanasite
  * Date: 01/28/2019
- * Time: 10:00
+ * Time: 10:00.
  */
 class AccountsTest extends TestCase
 {
-    public function testListZones()
+    public function testListZones(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listAccounts.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -24,7 +27,7 @@ class AccountsTest extends TestCase
                     'page' => 1,
                     'per_page' => 20,
                     'direction' => 'desc',
-                ])
+                ]),
             );
 
         $accounts = new Accounts($mock);
@@ -38,11 +41,11 @@ class AccountsTest extends TestCase
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $accounts->getBody()->result[0]->id);
     }
 
-    public function testAddAccountWithDefaultType()
+    public function testAddAccountWithDefaultType(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createStandardAccount.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -52,7 +55,7 @@ class AccountsTest extends TestCase
                 $this->equalTo([
                     'name' => 'Foo Bar',
                     'type' => 'standard',
-                ])
+                ]),
             );
 
         $accounts = new Accounts($mock);
@@ -61,11 +64,11 @@ class AccountsTest extends TestCase
         $this->assertEquals('2bab6ace8c72ed3f09b9eca6db1396bb', $accounts->getBody()->result->id);
     }
 
-    public function testAddAccountWithCustomType()
+    public function testAddAccountWithCustomType(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createEnterpriseAccount.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -75,7 +78,7 @@ class AccountsTest extends TestCase
                 $this->equalTo([
                     'name' => 'Foo Bar',
                     'type' => 'enterprise',
-                ])
+                ]),
             );
 
         $accounts = new Accounts($mock);

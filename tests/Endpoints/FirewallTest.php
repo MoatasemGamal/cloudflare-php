@@ -1,12 +1,18 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Configurations\FirewallRuleOptions;
+use Cloudflare\API\Endpoints\Firewall;
+
 class FirewallTest extends TestCase
 {
-    public function testCreatePageRules()
+    public function testCreatePageRules(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createFirewallRules.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -19,7 +25,7 @@ class FirewallTest extends TestCase
                         'description' => 'Foo',
                         'filter' => [
                             'expression' => 'http.cookie eq "foo"',
-                            'paused' => false
+                            'paused' => false,
                         ],
                     ],
                     [
@@ -27,42 +33,42 @@ class FirewallTest extends TestCase
                         'description' => 'Bar',
                         'filter' => [
                             'expression' => 'http.cookie eq "bar"',
-                            'paused' => false
+                            'paused' => false,
                         ],
-                    ]
-                ])
+                    ],
+                ]),
             );
 
-        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
+        $firewall = new Firewall($mock);
         $result = $firewall->createFirewallRules(
             '023e105f4ecef8ad9ca31a8372d0c353',
             [
                 [
                     'filter' => [
                         'expression' => 'http.cookie eq "foo"',
-                        'paused' => false
+                        'paused' => false,
                     ],
                     'action' => 'block',
-                    'description' => 'Foo'
+                    'description' => 'Foo',
                 ],
                 [
                     'filter' => [
                         'expression' => 'http.cookie eq "bar"',
-                        'paused' => false
+                        'paused' => false,
                     ],
                     'action' => 'block',
-                    'description' => 'Bar'
+                    'description' => 'Bar',
                 ],
-            ]
+            ],
         );
         $this->assertTrue($result);
     }
 
-    public function testCreatePageRule()
+    public function testCreatePageRule(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createFirewallRule.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('post')->willReturn($response);
 
         $mock->expects($this->once())
@@ -75,30 +81,30 @@ class FirewallTest extends TestCase
                         'description' => 'Foobar',
                         'filter' => [
                             'expression' => 'http.cookie eq "foobar"',
-                            'paused' => false
+                            'paused' => false,
                         ],
-                        'paused' => false
-                    ]
-                ])
+                        'paused' => false,
+                    ],
+                ]),
             );
 
-        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
-        $options = new \Cloudflare\API\Configurations\FirewallRuleOptions();
+        $firewall = new Firewall($mock);
+        $options = new FirewallRuleOptions();
         $options->setActionBlock();
         $result = $firewall->createFirewallRule(
             '023e105f4ecef8ad9ca31a8372d0c353',
             'http.cookie eq "foobar"',
             $options,
-            'Foobar'
+            'Foobar',
         );
         $this->assertTrue($result);
     }
 
-    public function testListFirewallRules()
+    public function testListFirewallRules(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/listFirewallRules.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
@@ -107,11 +113,11 @@ class FirewallTest extends TestCase
                 $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/rules'),
                 $this->equalTo([
                     'page' => 1,
-                    'per_page' => 50
-                ])
+                    'per_page' => 50,
+                ]),
             );
 
-        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
+        $firewall = new Firewall($mock);
         $result = $firewall->listFirewallRules('023e105f4ecef8ad9ca31a8372d0c353');
 
         $this->assertObjectHasAttribute('result', $result);
@@ -120,28 +126,28 @@ class FirewallTest extends TestCase
         $this->assertEquals('970b10321e3f4adda674c912b5f76591', $result->result[0]->id);
     }
 
-    public function testDeleteFirewallRule()
+    public function testDeleteFirewallRule(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/deleteFirewallRule.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('delete')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('delete')
             ->with(
-                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/rules/970b10321e3f4adda674c912b5f76591')
+                $this->equalTo('zones/023e105f4ecef8ad9ca31a8372d0c353/firewall/rules/970b10321e3f4adda674c912b5f76591'),
             );
 
-        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
+        $firewall = new Firewall($mock);
         $firewall->deleteFirewallRule('023e105f4ecef8ad9ca31a8372d0c353', '970b10321e3f4adda674c912b5f76591');
     }
 
-    public function testUpdateFirewallRule()
+    public function testUpdateFirewallRule(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateFirewallRule.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('put')->willReturn($response);
 
         $mock->expects($this->once())
@@ -155,14 +161,14 @@ class FirewallTest extends TestCase
                     'filter' => [
                         'id' => '5def9c4297e0466cb0736b838345d910',
                         'expression' => 'http.cookie eq "foo"',
-                        'paused' => false
+                        'paused' => false,
                     ],
-                    'paused' => false
-                ])
+                    'paused' => false,
+                ]),
             );
 
-        $firewall = new Cloudflare\API\Endpoints\Firewall($mock);
-        $options = new \Cloudflare\API\Configurations\FirewallRuleOptions();
+        $firewall = new Firewall($mock);
+        $options = new FirewallRuleOptions();
         $options->setActionBlock();
         $result = $firewall->updateFirewallRule(
             '023e105f4ecef8ad9ca31a8372d0c353',
@@ -170,7 +176,7 @@ class FirewallTest extends TestCase
             '5def9c4297e0466cb0736b838345d910',
             'http.cookie eq "foo"',
             $options,
-            'Foo'
+            'Foo',
         );
         $this->assertEquals('970b10321e3f4adda674c912b5f76591', $result->id);
     }

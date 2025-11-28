@@ -1,108 +1,112 @@
 <?php
 
+declare(strict_types=1);
+
+use Cloudflare\API\Adapter\Adapter;
+use Cloudflare\API\Endpoints\TLS;
+
 /**
  * Created by PhpStorm.
  * User: Jurgen Coetsiers
  * Date: 21/10/2018
- * Time: 09:09
+ * Time: 09:09.
  */
-
 class TLSTest extends TestCase
 {
-    public function testGetTLSClientAuth()
+    public function testGetTLSClientAuth(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/getTLSClientAuth.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('get')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('get')
             ->with(
-                $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/tls_client_auth')
+                $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/tls_client_auth'),
             );
 
-        $tlsMock = new \Cloudflare\API\Endpoints\TLS($mock);
+        $tlsMock = new TLS($mock);
         $result = $tlsMock->getTLSClientAuth('c2547eb745079dac9320b638f5e225cf483cc5cfdda41');
 
         $this->assertEquals('off', $result);
     }
 
-    public function testEnableTLS13()
+    public function testEnableTLS13(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/enableTLS13.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('patch')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('patch')
             ->with(
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/tls_1_3'),
-                $this->equalTo(['value' => 'on'])
+                $this->equalTo(['value' => 'on']),
             );
 
-        $tlsMock = new \Cloudflare\API\Endpoints\TLS($mock);
-        $result = $tlsMock->enableTLS13('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', true);
+        $tlsMock = new TLS($mock);
+        $result = $tlsMock->enableTLS13('c2547eb745079dac9320b638f5e225cf483cc5cfdda41');
 
         $this->assertTrue($result);
     }
 
-    public function testDisableTLS13()
+    public function testDisableTLS13(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/disableTLS13.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('patch')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('patch')
             ->with(
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/tls_1_3'),
-                $this->equalTo(['value' => 'off'])
+                $this->equalTo(['value' => 'off']),
             );
 
-        $tlsMock = new \Cloudflare\API\Endpoints\TLS($mock);
-        $result = $tlsMock->disableTLS13('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', true);
+        $tlsMock = new TLS($mock);
+        $result = $tlsMock->disableTLS13('c2547eb745079dac9320b638f5e225cf483cc5cfdda41');
 
         $this->assertTrue($result);
     }
 
-    public function testChangeMinimimTLSVersion()
+    public function testChangeMinimimTLSVersion(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/changeMinimumTLSVersion.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('patch')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('patch')
             ->with(
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/min_tls_version'),
-                $this->equalTo(['value' => '1.1'])
+                $this->equalTo(['value' => '1.1']),
             );
 
-        $tlsMock = new \Cloudflare\API\Endpoints\TLS($mock);
+        $tlsMock = new TLS($mock);
         $result = $tlsMock->changeMinimumTLSVersion('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', '1.1');
 
         $this->assertTrue($result);
     }
 
-    public function testUpdateTLSClientAuth()
+    public function testUpdateTLSClientAuth(): void
     {
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/updateTLSClientAuth.json');
 
-        $mock = $this->getMockBuilder(\Cloudflare\API\Adapter\Adapter::class)->getMock();
+        $mock = $this->getMockBuilder(Adapter::class)->getMock();
         $mock->method('patch')->willReturn($response);
 
         $mock->expects($this->once())
             ->method('patch')
             ->with(
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/settings/tls_client_auth'),
-                $this->equalTo(['value' => 'off'])
+                $this->equalTo(['value' => 'off']),
             );
 
-        $tlsMock = new \Cloudflare\API\Endpoints\TLS($mock);
+        $tlsMock = new TLS($mock);
         $result = $tlsMock->updateTLSClientAuth('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', 'off');
 
         $this->assertTrue($result);

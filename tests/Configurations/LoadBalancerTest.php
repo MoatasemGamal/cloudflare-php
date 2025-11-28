@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne
@@ -13,14 +15,14 @@ class LoadBalancerTest extends TestCase
     /**
      * @dataProvider testArgumentsDataProvider
      */
-    public function testArguments($setFunction, $arguments, $getFunction, $invalid)
+    public function testArguments(string $setFunction, array $arguments, string $getFunction, bool $invalid): void
     {
         $loadBalancer = new LoadBalancer('bogus', [], 'bogus');
         foreach ($arguments as $argument) {
-            if ($invalid === true) {
+            if ($invalid) {
                 try {
                     $loadBalancer->{$setFunction}($argument);
-                } catch (ConfigurationsException $e) {
+                } catch (ConfigurationsException) {
                     $this->assertNotEquals($argument, $loadBalancer->{$getFunction}());
                 }
             } elseif ($invalid === false) {
@@ -30,26 +32,26 @@ class LoadBalancerTest extends TestCase
         }
     }
 
-    public function testArgumentsDataProvider()
+    public function testArgumentsDataProvider(): array
     {
         return [
             'steeringPolicy arguments valid' => [
-                'setSteeringPolicy', ['off', 'geo', 'random', 'dynamic_latency', ''], 'getSteeringPolicy', false
+                'setSteeringPolicy', ['off', 'geo', 'random', 'dynamic_latency', ''], 'getSteeringPolicy', false,
             ],
             'sessionAffinity arguments valid' => [
-                'setSessionAffinity', ['none', 'cookie', 'ip_cookie', ''], 'getSessionAffinity', false
+                'setSessionAffinity', ['none', 'cookie', 'ip_cookie', ''], 'getSessionAffinity', false,
             ],
             'sessionAffinityTtl arguments valid' => [
-                'setSessionAffinityTtl', [3600], 'getSessionAffinityTtl', false
+                'setSessionAffinityTtl', [3600], 'getSessionAffinityTtl', false,
             ],
             'steeringPolicy arguments invalid' => [
-                'setSteeringPolicy', ['invalid'], 'getSteeringPolicy', true
+                'setSteeringPolicy', ['invalid'], 'getSteeringPolicy', true,
             ],
             'sessionAffinity arguments invalid' => [
-                'setSessionAffinity', ['invalid'], 'getSessionAffinity', true
+                'setSessionAffinity', ['invalid'], 'getSessionAffinity', true,
             ],
             'sessionAffinityTtl arguments invalid' => [
-                'setSessionAffinityTtl', [1337], 'getSessionAffinityTtl', true
+                'setSessionAffinityTtl', [1337], 'getSessionAffinityTtl', true,
             ],
         ];
     }

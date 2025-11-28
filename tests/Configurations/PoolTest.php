@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne
@@ -13,14 +15,14 @@ class PoolTest extends TestCase
     /**
      * @dataProvider testArgumentsDataProvider
      */
-    public function testArguments($setFunction, $arguments, $getFunction, $invalid)
+    public function testArguments(string $setFunction, array $arguments, string $getFunction, bool $invalid): void
     {
         $pool = new Pool('bogus', []);
         foreach ($arguments as $argument) {
             if ($invalid) {
                 try {
                     $pool->{$setFunction}($argument);
-                } catch (ConfigurationsException $e) {
+                } catch (ConfigurationsException) {
                     $this->assertNotEquals($argument, $pool->{$getFunction}());
                 }
             } elseif ($invalid === false) {
@@ -30,24 +32,24 @@ class PoolTest extends TestCase
         }
     }
 
-    public function testArgumentsDataProvider()
+    public function testArgumentsDataProvider(): array
     {
         return [
             'origins arguments valid' => [
-                'setOrigins', [[['name' => 'test', 'address' => 'server1.example.com']]], 'getOrigins', false
+                'setOrigins', [[['name' => 'test', 'address' => 'server1.example.com']]], 'getOrigins', false,
             ],
             'setNotificationEmail arguments valid' => [
-                'setNotificationEmail', ['user@example.com'], 'getNotificationEmail', false
+                'setNotificationEmail', ['user@example.com'], 'getNotificationEmail', false,
             ],
             'origins arguments invalid no address' => [
-                'setOrigins', [['name' => 'test']], 'getOrigins', true
+                'setOrigins', [['name' => 'test']], 'getOrigins', true,
             ],
             'origins arguments invalid no name' => [
-                'setOrigins', [['address' => 'server1.example.com']], 'getOrigins', true
+                'setOrigins', [['address' => 'server1.example.com']], 'getOrigins', true,
             ],
             'setNotificationEmail arguments invalid' => [
-                'setNotificationEmail', ['userexample.com'], 'getNotificationEmail', true
-            ]
+                'setNotificationEmail', ['userexample.com'], 'getNotificationEmail', true,
+            ],
         ];
     }
 }

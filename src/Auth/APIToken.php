@@ -1,25 +1,24 @@
 <?php
+
+declare(strict_types=1);
 /**
  * User: czPechy
  * Date: 30/07/2018
- * Time: 22:42
+ * Time: 22:42.
  */
 
 namespace Cloudflare\API\Auth;
 
 class APIToken implements Auth
 {
-    private $apiToken;
-
-    public function __construct(string $apiToken)
+    public function __construct(private readonly string $apiToken)
     {
-        $this->apiToken = $apiToken;
     }
 
     public function getHeaders(): array
     {
         return [
-            'Authorization' => 'Bearer ' . $this->apiToken
+            'Authorization' => 'Bearer ' . $this->apiToken,
         ];
     }
 }

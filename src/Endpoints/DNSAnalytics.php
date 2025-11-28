@@ -1,26 +1,26 @@
 <?php
+
+declare(strict_types=1);
 /**
  * Created by Visual Studio Code.
  * User: elliot.alderson
  * Date: 2020-02-06
- * Time: 03:40 AM
+ * Time: 03:40 AM.
  */
 
 namespace Cloudflare\API\Endpoints;
 
 use Cloudflare\API\Adapter\Adapter;
-use Cloudflare\API\Traits\BodyAccessorTrait;
 use Cloudflare\API\Configurations\DNSAnalytics as Configs;
+use Cloudflare\API\Traits\BodyAccessorTrait;
+use stdClass;
 
 class DNSAnalytics implements API
 {
     use BodyAccessorTrait;
 
-    private $adapter;
-
-    public function __construct(Adapter $adapter)
+    public function __construct(private Adapter $adapter)
     {
-        $this->adapter = $adapter;
     }
 
     /**
@@ -44,48 +44,48 @@ class DNSAnalytics implements API
         string $filters = '',
         string $since = '',
         string $until = '',
-        int $limit = 100
-    ): \stdClass {
-        if (count($dimensions) === 0) {
+        int $limit = 100,
+    ): stdClass {
+        if ($dimensions === []) {
             throw new EndpointException(
-                'At least one dimension is required for getting a report.'
+                'At least one dimension is required for getting a report.',
             );
         }
 
-        if (count($metrics) === 0) {
+        if ($metrics === []) {
             throw new EndpointException(
-                'At least one metric is required for getting a report.'
+                'At least one metric is required for getting a report.',
             );
         }
 
-        if (!$since) {
+        if ($since === '' || $since === '0') {
             throw new EndpointException(
-                'Start date is required for getting a report.'
+                'Start date is required for getting a report.',
             );
         }
 
-        if (!$until) {
+        if ($until === '' || $until === '0') {
             throw new EndpointException(
-                'End date is required for getting a report.'
+                'End date is required for getting a report.',
             );
         }
 
         $options = [
-            'dimensions' => implode(',', $dimensions),
-            'metrics' => implode(',', $metrics),
+            'dimensions' => \implode(',', $dimensions),
+            'metrics' => \implode(',', $metrics),
             'since' => $since,
-            'until' => $until
+            'until' => $until,
         ];
 
-        if (count($sort) !== 0) {
-            $options['sort'] = implode(',', $sort);
+        if ($sort !== []) {
+            $options['sort'] = \implode(',', $sort);
         }
 
-        if ($filters) {
+        if ($filters !== '' && $filters !== '0') {
             $options['filters'] = $filters;
         }
 
-        if ($limit) {
+        if ($limit !== 0) {
             $options['limit'] = $limit;
         }
 
@@ -93,7 +93,7 @@ class DNSAnalytics implements API
 
         $report = $this->adapter->get($endpoint, $options);
 
-        $this->body = json_decode($report->getBody());
+        $this->body = \json_decode($report->getBody());
 
         return $this->body->result;
     }
@@ -121,8 +121,8 @@ class DNSAnalytics implements API
         string $since = '',
         string $until = '',
         int $limit = 100,
-        string $timeDelta = ''
-    ): \stdClass {
+        string $timeDelta = '',
+    ): stdClass {
         $options = new Configs();
         $options->setDimensions($dimensions);
         $options->setMetrics($metrics);
@@ -137,7 +137,7 @@ class DNSAnalytics implements API
 
         $report = $this->adapter->get($endpoint, $options->getArray());
 
-        $this->body = json_decode($report->getBody());
+        $this->body = \json_decode($report->getBody());
 
         return $this->body->result;
     }

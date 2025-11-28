@@ -1,4 +1,6 @@
 <?php
+
+declare(strict_types=1);
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne
@@ -9,7 +11,7 @@ namespace Cloudflare\API\Configurations;
 
 class Pool implements Configurations
 {
-    private $configs = [];
+    private array $configs = [];
 
     public function __construct(string $name, array $origins)
     {
@@ -17,17 +19,17 @@ class Pool implements Configurations
         $this->setOrigins($origins);
     }
 
-    public function setName(string $name)
+    public function setName(string $name): void
     {
         $this->configs['name'] = $name;
     }
 
-    public function getName():string
+    public function getName(): string
     {
         return $this->configs['name'] ?? '';
     }
 
-    public function setOrigins(array $origins)
+    public function setOrigins(array $origins): void
     {
         foreach ($origins as $origin) {
             if (!isset($origin['name'])) {
@@ -40,76 +42,76 @@ class Pool implements Configurations
         $this->configs['origins'] = $origins;
     }
 
-    public function getOrigins():array
+    public function getOrigins(): array
     {
         return $this->configs['origins'] ?? [];
     }
 
-    public function setDescription(string $description = '')
+    public function setDescription(string $description = ''): void
     {
         $this->configs['description'] = $description;
     }
 
-    public function getDescription():string
+    public function getDescription(): string
     {
         return $this->configs['description'] ?? '';
     }
 
-    public function enable()
+    public function enable(): void
     {
         $this->configs['enabled'] = true;
     }
 
-    public function isEnabled():bool
+    public function isEnabled(): bool
     {
         return $this->configs['enabled'] ?? true;
     }
 
-    public function disable()
+    public function disable(): void
     {
         $this->configs['enabled'] = false;
     }
 
-    public function isDisabled():bool
+    public function isDisabled(): bool
     {
         return !$this->configs['enabled'] ?? false;
     }
 
-    public function getEnabled():bool
+    public function getEnabled(): bool
     {
         return $this->configs['enabled'] ?? true;
     }
 
-    public function setMonitor(string $monitor)
+    public function setMonitor(string $monitor): void
     {
         $this->configs['monitor'] = $monitor;
     }
 
-    public function getMonitor():string
+    public function getMonitor(): string
     {
         return $this->configs['monitor'] ?? '';
     }
 
-    public function setCheckRegions(array $checkRegions)
+    public function setCheckRegions(array $checkRegions): void
     {
         $this->configs['check_regions'] = $checkRegions;
     }
 
-    public function getCheckRegions():array
+    public function getCheckRegions(): array
     {
         return $this->configs['check_regions'] ?? [];
     }
 
-    public function setNotificationEmail(string $email)
+    public function setNotificationEmail(string $email): void
     {
-        if (filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
+        if (\filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new ConfigurationsException('Invalid notification email given');
         }
 
         $this->configs['notification_email'] = $email;
     }
 
-    public function getNotificationEmail():string
+    public function getNotificationEmail(): string
     {
         return $this->configs['notification_email'] ?? '';
     }
