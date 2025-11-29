@@ -23,7 +23,7 @@ class Crypto implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/opportunistic_encryption',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -41,7 +41,7 @@ class Crypto implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/opportunistic_onion',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return $body->result ?? false;
     }
 
@@ -59,7 +59,7 @@ class Crypto implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -77,7 +77,7 @@ class Crypto implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 }

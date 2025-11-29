@@ -93,7 +93,7 @@ class DNSAnalytics implements API
 
         $report = $this->adapter->get($endpoint, $options);
 
-        $this->body = \json_decode($report->getBody());
+        $this->body = \json_decode((string) $report->getBody());
 
         return $this->body->result;
     }
@@ -137,7 +137,7 @@ class DNSAnalytics implements API
 
         $report = $this->adapter->get($endpoint, $options->getArray());
 
-        $this->body = \json_decode($report->getBody());
+        $this->body = \json_decode((string) $report->getBody());
 
         return $this->body->result;
     }

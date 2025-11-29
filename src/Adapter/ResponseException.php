@@ -31,7 +31,7 @@ class ResponseException extends Exception
 
         // Attempt to derive detailed error from standard JSON response.
         if (\str_contains($contentType, 'application/json')) {
-            $json = \json_decode($response->getBody());
+            $json = \json_decode((string) $response->getBody());
             if (\json_last_error() !== JSON_ERROR_NONE) {
                 return new ResponseException($err->getMessage(), 0, new JSONException(\json_last_error_msg(), 0, $err));
             }

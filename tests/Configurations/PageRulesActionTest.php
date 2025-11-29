@@ -2,7 +2,6 @@
 
 declare(strict_types=1);
 use Cloudflare\API\Configurations\PageRulesActions;
-
 class PageRulesActionTest extends TestCase
 {
     public function testForwardingURLConfigurationIsApplied(): void

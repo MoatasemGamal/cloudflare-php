@@ -4,9 +4,9 @@ declare(strict_types=1);
 use GuzzleHttp\Psr7;
 use GuzzleHttp\Psr7\Response;
 use GuzzleHttp\Psr7\Stream;
+use GuzzleHttp\Psr7\Utils;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
-use function GuzzleHttp\Psr7\stream_for;
 
 /**
  * Class TestCase.
@@ -25,7 +25,7 @@ abstract class TestCase extends BaseTestCase
 
         $this->assertFileExists($path);
 
-        $stream = stream_for(file_get_contents($path));
+        $stream = Utils::streamFor(file_get_contents($path));
 
         $this->assertInstanceOf(Stream::class, $stream);
 
@@ -42,7 +42,7 @@ abstract class TestCase extends BaseTestCase
     {
         $stream = $this->getPsr7StreamForFixture($fixture);
 
-        $this->assertNotNull(json_decode($stream));
+        $this->assertNotNull(json_decode((string) $stream));
         $this->assertEquals(JSON_ERROR_NONE, json_last_error());
 
         return new Response($statusCode, ['Content-Type' => 'application/json'], $stream);

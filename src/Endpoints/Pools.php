@@ -25,7 +25,7 @@ class Pools implements API
     public function listPools(string $accountID): mixed
     {
         $pools = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools');
-        $this->body = \json_decode($pools->getBody());
+        $this->body = \json_decode((string) $pools->getBody());
 
         return $this->body->result;
     }
@@ -33,14 +33,14 @@ class Pools implements API
     public function getPoolDetails(string $accountID, string $poolID): mixed
     {
         $pool = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools/' . $poolID);
-        $this->body = \json_decode($pool->getBody());
+        $this->body = \json_decode((string) $pool->getBody());
         return $this->body->result;
     }
 
     public function getPoolHealthDetails(string $accountID, string $poolID): mixed
     {
         $pool = $this->adapter->get('accounts/' . $accountID . '/load_balancers/pools/' . $poolID . '/health');
-        $this->body = \json_decode($pool->getBody());
+        $this->body = \json_decode((string) $pool->getBody());
         return $this->body->result;
     }
 
@@ -81,7 +81,7 @@ class Pools implements API
 
         $query = $this->adapter->put('accounts/' . $accountID . '/load_balancers/pools/' . $poolID, $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -93,7 +93,7 @@ class Pools implements API
 
         $query = $this->adapter->post('accounts/' . $accountID . '/load_balancers/pools', $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -101,7 +101,7 @@ class Pools implements API
     {
         $pool = $this->adapter->delete('accounts/' . $accountID . '/load_balancers/pools/' . $poolID);
 
-        $this->body = \json_decode($pool->getBody());
+        $this->body = \json_decode((string) $pool->getBody());
         return isset($this->body->result->id);
     }
 }

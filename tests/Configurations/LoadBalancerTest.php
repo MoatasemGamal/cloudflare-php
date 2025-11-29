@@ -1,6 +1,7 @@
 <?php
 
 declare(strict_types=1);
+
 /**
  * @author Martijn Smidt <martijn@squeezely.tech>
  * User: HemeraOne

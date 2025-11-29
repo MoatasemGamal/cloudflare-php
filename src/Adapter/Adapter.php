@@ -20,11 +20,6 @@ use Psr\Http\Message\ResponseInterface;
 interface Adapter
 {
     /**
-     * Adapter constructor.
-     */
-    public function __construct(Auth $auth, string $baseURI);
-
-    /**
      * Sends a GET request.
      * Per Robustness Principle - not including the ability to send a body with a GET request (though possible in the
      * RFCs, it is never useful).

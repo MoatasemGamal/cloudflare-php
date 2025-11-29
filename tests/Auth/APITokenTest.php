@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Cloudflare\API\Auth\APIToken;
-
 /**
  * User: czPechy
  * Date: 30/07/2018

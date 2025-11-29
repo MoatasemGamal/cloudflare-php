@@ -19,7 +19,7 @@ class AccountRoles implements API
     public function listAccountRoles(string $accountId): stdClass
     {
         $roles = $this->adapter->get('accounts/' . $accountId . '/roles');
-        $this->body = \json_decode($roles->getBody());
+        $this->body = \json_decode((string) $roles->getBody());
 
         return (object)[
             'result' => $this->body->result,

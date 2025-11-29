@@ -63,7 +63,7 @@ class CustomHostnames implements API
         }
 
         $zone = $this->adapter->post('zones/' . $zoneID . '/custom_hostnames', $options);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
         return $this->body->result;
     }
 
@@ -100,7 +100,7 @@ class CustomHostnames implements API
         }
 
         $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames', $query);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -108,7 +108,7 @@ class CustomHostnames implements API
     public function getHostname(string $zoneID, string $hostnameID): mixed
     {
         $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
 
         return $this->body->result;
     }
@@ -171,21 +171,21 @@ class CustomHostnames implements API
         }
 
         $zone = $this->adapter->patch('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID, $options);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
         return $this->body->result;
     }
 
     public function deleteHostname(string $zoneID, string $hostnameID): stdClass
     {
         $zone = $this->adapter->delete('zones/' . $zoneID . '/custom_hostnames/' . $hostnameID);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
         return $this->body;
     }
 
     public function getFallbackOrigin(string $zoneID): stdClass
     {
         $zone = $this->adapter->get('zones/' . $zoneID . '/custom_hostnames/fallback_origin');
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
 
         return $this->body->result;
     }

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Cloudflare\API\Configurations\ZoneLockdown;
-
 /**
  * Created by PhpStorm.
  * User: junade

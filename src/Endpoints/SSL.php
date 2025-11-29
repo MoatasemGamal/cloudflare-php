@@ -23,7 +23,7 @@ class SSL implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/ssl',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -48,7 +48,7 @@ class SSL implements API
             ],
         );
 
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body;
         }
@@ -66,7 +66,7 @@ class SSL implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/always_use_https',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return $body->result ?? false;
     }
 
@@ -81,7 +81,7 @@ class SSL implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/automatic_https_rewrites',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return $body->result ?? false;
     }
 
@@ -99,7 +99,7 @@ class SSL implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -117,7 +117,7 @@ class SSL implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -135,7 +135,7 @@ class SSL implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -154,7 +154,7 @@ class SSL implements API
                 'validation_method' => $validationMethod,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 }

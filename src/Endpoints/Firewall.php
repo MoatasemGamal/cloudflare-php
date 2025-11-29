@@ -19,7 +19,7 @@ class Firewall implements API
         array $rules,
     ): bool {
         $query = $this->adapter->post('zones/' . $zoneID . '/firewall/rules', $rules);
-        $body = \json_decode($query->getBody());
+        $body = \json_decode((string) $query->getBody());
 
         foreach ($body->result as $result) {
             if (!isset($result->id)) {
@@ -66,7 +66,7 @@ class Firewall implements API
         ];
 
         $rules = $this->adapter->get('zones/' . $zoneID . '/firewall/rules', $query);
-        $body = \json_decode($rules->getBody());
+        $body = \json_decode((string) $rules->getBody());
 
         return (object)['result' => $body->result, 'result_info' => $body->result_info];
     }
@@ -77,7 +77,7 @@ class Firewall implements API
     ): bool {
         $rule = $this->adapter->delete('zones/' . $zoneID . '/firewall/rules/' . $ruleID);
 
-        $body = \json_decode($rule->getBody());
+        $body = \json_decode((string) $rule->getBody());
         return isset($body->result->id);
     }
 
@@ -108,7 +108,7 @@ class Firewall implements API
         }
 
         $rule = $this->adapter->put('zones/' . $zoneID . '/firewall/rules/' . $ruleID, $rule);
-        $body = \json_decode($rule->getBody());
+        $body = \json_decode((string) $rule->getBody());
 
         return $body->result;
     }

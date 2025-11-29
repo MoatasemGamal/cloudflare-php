@@ -45,7 +45,7 @@ class WAF implements API
         }
 
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -55,7 +55,7 @@ class WAF implements API
         string $packageID,
     ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return $this->body->result;
     }
@@ -83,7 +83,7 @@ class WAF implements API
             $query['direction'] = $direction;
         }
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -94,7 +94,7 @@ class WAF implements API
         string $ruleID,
     ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules/' . $ruleID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return $this->body->result;
     }
@@ -113,7 +113,7 @@ class WAF implements API
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/rules/' . $ruleID,
             $query,
         );
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return $this->body->result;
     }
@@ -145,7 +145,7 @@ class WAF implements API
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups',
             $query,
         );
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -156,7 +156,7 @@ class WAF implements API
         string $groupID,
     ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups/' . $groupID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return $this->body->result;
     }
@@ -175,7 +175,7 @@ class WAF implements API
             'zones/' . $zoneID . '/firewall/waf/packages/' . $packageID . '/groups/' . $groupID,
             $query,
         );
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return $this->body->result;
     }

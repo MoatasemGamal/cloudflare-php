@@ -48,7 +48,7 @@ class Membership implements API
         }
 
         $memberships = $this->adapter->get('memberships', $query);
-        $this->body = \json_decode($memberships->getBody());
+        $this->body = \json_decode((string) $memberships->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -56,14 +56,14 @@ class Membership implements API
     public function getMembershipDetails(string $membershipId): stdClass
     {
         $membership = $this->adapter->get(\sprintf('memberships/%s', $membershipId));
-        $this->body = \json_decode($membership->getBody());
+        $this->body = \json_decode((string) $membership->getBody());
         return $this->body->result;
     }
 
     public function updateMembershipStatus(string $membershipId, string $status): stdClass
     {
         $response = $this->adapter->put(\sprintf('memberships/%s', $membershipId), ['status' => $status]);
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return $this->body;
     }
 
@@ -71,7 +71,7 @@ class Membership implements API
     {
         $response = $this->adapter->delete(\sprintf('memberships/%s', $membershipId));
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return isset($this->body->result->id);
     }
 }

@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Cloudflare\API\Configurations\UARules;
-
 /**
  * Created by PhpStorm.
  * User: junade

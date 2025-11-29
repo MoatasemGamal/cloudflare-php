@@ -2,11 +2,8 @@
 
 declare(strict_types=1);
 
-namespace Endpoints;
-
 use Cloudflare\API\Adapter\Adapter;
 use Cloudflare\API\Endpoints\AccountRoles;
-use TestCase;
 
 class AccountRolesTest extends TestCase
 {

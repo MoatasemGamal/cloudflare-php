@@ -23,7 +23,7 @@ class FirewallSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/security_level',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -41,7 +41,7 @@ class FirewallSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/challenge_ttl',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -59,7 +59,7 @@ class FirewallSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/browser_check',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         if (isset($body->result)) {
             return $body->result->value;
         }
@@ -80,7 +80,7 @@ class FirewallSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -98,7 +98,7 @@ class FirewallSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 
@@ -116,7 +116,7 @@ class FirewallSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return isset($body->success) && $body->success === true;
     }
 }

@@ -33,7 +33,7 @@ class ZoneLockdown implements API
         ];
 
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/lockdowns', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -60,14 +60,14 @@ class ZoneLockdown implements API
 
         $user = $this->adapter->post('zones/' . $zoneID . '/firewall/lockdowns', $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
     public function getLockdownDetails(string $zoneID, string $lockdownID): stdClass
     {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/lockdowns/' . $lockdownID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return $this->body->result;
     }
 
@@ -90,7 +90,7 @@ class ZoneLockdown implements API
 
         $user = $this->adapter->put('zones/' . $zoneID . '/firewall/lockdowns/' . $lockdownID, $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -98,7 +98,7 @@ class ZoneLockdown implements API
     {
         $user = $this->adapter->delete('zones/' . $zoneID . '/firewall/lockdowns/' . $lockdownID);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 }

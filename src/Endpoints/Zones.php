@@ -40,28 +40,28 @@ class Zones implements API
         }
 
         $user = $this->adapter->post('zones', $options);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return $this->body->result;
     }
 
     public function activationCheck(string $zoneID): bool
     {
         $user = $this->adapter->put('zones/' . $zoneID . '/activation_check');
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
     public function pause(string $zoneID): bool
     {
         $user = $this->adapter->patch('zones/' . $zoneID, ['paused' => true]);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
     public function unpause(string $zoneID): bool
     {
         $user = $this->adapter->patch('zones/' . $zoneID, ['paused' => false]);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -69,7 +69,7 @@ class Zones implements API
         string $zoneId,
     ): stdClass {
         $user = $this->adapter->get('zones/' . $zoneId);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result];
     }
@@ -106,7 +106,7 @@ class Zones implements API
         }
 
         $user = $this->adapter->get('zones', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -141,7 +141,7 @@ class Zones implements API
     {
         $response = $this->adapter->patch('zones/' . $zoneID . '/settings/development_mode', ['value' => $enable ? 'on' : 'off']);
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return (bool) $this->body->success;
     }
 
@@ -152,7 +152,7 @@ class Zones implements API
     {
         $response = $this->adapter->get('zones/' . $zoneID . '/settings/cache_level');
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
 
         return $this->body->result->value;
     }
@@ -165,7 +165,7 @@ class Zones implements API
     {
         $response = $this->adapter->patch('zones/' . $zoneID . '/settings/cache_level', ['value' => $level]);
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return (bool) $this->body->success;
     }
 
@@ -185,7 +185,7 @@ class Zones implements API
         }
         $user = $this->adapter->post('zones/' . $zoneID . '/purge_cache', ['purge_everything' => true]);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -221,7 +221,7 @@ class Zones implements API
 
         $user = $this->adapter->post('zones/' . $zoneID . '/purge_cache', $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -231,7 +231,7 @@ class Zones implements API
     public function deleteZone(string $identifier): bool
     {
         $user = $this->adapter->delete('zones/' . $identifier);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 }

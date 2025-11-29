@@ -24,7 +24,7 @@ class AccountMembers implements API
         ];
 
         $account = $this->adapter->post('accounts/' . $accountId . '/members', $options);
-        $this->body = \json_decode($account->getBody());
+        $this->body = \json_decode((string) $account->getBody());
 
         return $this->body->result;
     }
@@ -37,7 +37,7 @@ class AccountMembers implements API
         ];
 
         $zone = $this->adapter->get('accounts/' . $accountId . '/members', $query);
-        $this->body = \json_decode($zone->getBody());
+        $this->body = \json_decode((string) $zone->getBody());
 
         return (object)[
             'result' => $this->body->result,

@@ -25,7 +25,7 @@ class IPs implements API
     public function listIPs(): stdClass
     {
         $ips = $this->adapter->get('ips');
-        $this->body = \json_decode($ips->getBody());
+        $this->body = \json_decode((string) $ips->getBody());
 
         return $this->body->result;
     }

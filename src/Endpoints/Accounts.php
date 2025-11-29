@@ -29,7 +29,7 @@ class Accounts implements API
         ];
 
         $account = $this->adapter->post('accounts', $options);
-        $this->body = \json_decode($account->getBody());
+        $this->body = \json_decode((string) $account->getBody());
 
         return $this->body->result;
     }
@@ -49,7 +49,7 @@ class Accounts implements API
         }
 
         $user = $this->adapter->get('accounts', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -58,7 +58,7 @@ class Accounts implements API
     {
         $response = $this->adapter->get('accounts/' . $accountID . '/registrar/domains');
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
 
         return $this->body->result;
     }
@@ -67,7 +67,7 @@ class Accounts implements API
     {
         $response = $this->adapter->get('accounts/' . $accountID . '/registrar/domains/' . $domainName);
 
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
 
         return $this->body->result;
     }
@@ -75,14 +75,14 @@ class Accounts implements API
     public function lockDomain(string $accountID, string $domainName): stdClass
     {
         $response = $this->adapter->put('accounts/' . $accountID . '/registrar/domains/' . $domainName, ['locked' => true]);
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return $this->body;
     }
 
     public function unlockDomain(string $accountID, string $domainName): stdClass
     {
         $response = $this->adapter->put('accounts/' . $accountID . '/registrar/domains/' . $domainName, ['locked' => false]);
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return $this->body;
     }
 }

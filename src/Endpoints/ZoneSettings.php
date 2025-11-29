@@ -26,7 +26,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/minify',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -40,7 +40,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/rocket_loader',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -54,7 +54,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/always_online',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -68,7 +68,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/email_obfuscation',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -82,7 +82,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/server_side_exclude',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -96,7 +96,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/hotlink_protection',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -110,7 +110,7 @@ class ZoneSettings implements API
         $return = $this->adapter->get(
             'zones/' . $zoneID . '/settings/browser_cache_ttl',
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;
@@ -127,7 +127,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -143,7 +143,7 @@ class ZoneSettings implements API
                 ],
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -155,7 +155,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -167,7 +167,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -179,7 +179,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -191,7 +191,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
         return (bool) $body->success;
     }
 
@@ -203,7 +203,7 @@ class ZoneSettings implements API
                 'value' => $value,
             ],
         );
-        $body = \json_decode($return->getBody());
+        $body = \json_decode((string) $return->getBody());
 
         if ($body->success) {
             return $body->result->value;

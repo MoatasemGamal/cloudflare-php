@@ -34,7 +34,7 @@ class UARules implements API
         ];
 
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/ua_rules', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -61,14 +61,14 @@ class UARules implements API
 
         $user = $this->adapter->post('zones/' . $zoneID . '/firewall/ua_rules', $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
     public function getRuleDetails(string $zoneID, string $blockID): stdClass
     {
         $user = $this->adapter->get('zones/' . $zoneID . '/firewall/ua_rules/' . $blockID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return $this->body->result;
     }
 
@@ -91,7 +91,7 @@ class UARules implements API
 
         $user = $this->adapter->put('zones/' . $zoneID . '/firewall/ua_rules/' . $ruleID, $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -99,7 +99,7 @@ class UARules implements API
     {
         $user = $this->adapter->delete('zones/' . $zoneID . '/firewall/ua_rules/' . $ruleID);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 }

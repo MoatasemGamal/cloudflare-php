@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Cloudflare\API\Auth\UserServiceKey;
-
 /**
  * User: junade
  * Date: 13/01/2017

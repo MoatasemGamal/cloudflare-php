@@ -56,7 +56,7 @@ class DNS implements API
 
         $user = $this->adapter->post('zones/' . $zoneID . '/dns_records', $options);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 
@@ -98,7 +98,7 @@ class DNS implements API
         }
 
         $user = $this->adapter->get('zones/' . $zoneID . '/dns_records', $query);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -106,7 +106,7 @@ class DNS implements API
     public function getRecordDetails(string $zoneID, string $recordID): stdClass
     {
         $user = $this->adapter->get('zones/' . $zoneID . '/dns_records/' . $recordID);
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return $this->body->result;
     }
 
@@ -119,7 +119,7 @@ class DNS implements API
     public function updateRecordDetails(string $zoneID, string $recordID, array $details): stdClass
     {
         $response = $this->adapter->put('zones/' . $zoneID . '/dns_records/' . $recordID, $details);
-        $this->body = \json_decode($response->getBody());
+        $this->body = \json_decode((string) $response->getBody());
         return $this->body;
     }
 
@@ -127,7 +127,7 @@ class DNS implements API
     {
         $user = $this->adapter->delete('zones/' . $zoneID . '/dns_records/' . $recordID);
 
-        $this->body = \json_decode($user->getBody());
+        $this->body = \json_decode((string) $user->getBody());
         return isset($this->body->result->id);
     }
 }

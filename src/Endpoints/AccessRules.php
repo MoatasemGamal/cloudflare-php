@@ -68,7 +68,7 @@ class AccessRules implements API
         }
 
         $data = $this->adapter->get('zones/' . $zoneID . '/firewall/access_rules/rules', $query);
-        $this->body = \json_decode($data->getBody());
+        $this->body = \json_decode((string) $data->getBody());
 
         return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
@@ -90,7 +90,7 @@ class AccessRules implements API
 
         $query = $this->adapter->post('zones/' . $zoneID . '/firewall/access_rules/rules', $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -110,7 +110,7 @@ class AccessRules implements API
 
         $query = $this->adapter->patch('zones/' . $zoneID . '/firewall/access_rules/rules/' . $ruleID, $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -122,7 +122,7 @@ class AccessRules implements API
 
         $data = $this->adapter->delete('zones/' . $zoneID . '/firewall/access_rules/rules/' . $ruleID, $options);
 
-        $this->body = \json_decode($data->getBody());
+        $this->body = \json_decode((string) $data->getBody());
         return isset($this->body->result->id);
     }
 }

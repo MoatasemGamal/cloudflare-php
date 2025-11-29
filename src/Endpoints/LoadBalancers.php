@@ -25,7 +25,7 @@ class LoadBalancers implements API
     public function listLoadBalancers(string $zoneID): mixed
     {
         $loadBalancers = $this->adapter->get('zones/' . $zoneID . '/load_balancers');
-        $this->body = \json_decode($loadBalancers->getBody());
+        $this->body = \json_decode((string) $loadBalancers->getBody());
 
         return $this->body->result;
     }
@@ -33,7 +33,7 @@ class LoadBalancers implements API
     public function getLoadBalancerDetails(string $zoneID, string $loadBalancerID): mixed
     {
         $loadBalancer = $this->adapter->get('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID);
-        $this->body = \json_decode($loadBalancer->getBody());
+        $this->body = \json_decode((string) $loadBalancer->getBody());
         return $this->body->result;
     }
 
@@ -87,7 +87,7 @@ class LoadBalancers implements API
 
         $query = $this->adapter->put('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID, $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -99,7 +99,7 @@ class LoadBalancers implements API
 
         $query = $this->adapter->post('zones/' . $zoneID . '/load_balancers', $options);
 
-        $this->body = \json_decode($query->getBody());
+        $this->body = \json_decode((string) $query->getBody());
         return isset($this->body->result->id);
     }
 
@@ -107,7 +107,7 @@ class LoadBalancers implements API
     {
         $loadBalancer = $this->adapter->delete('zones/' . $zoneID . '/load_balancers/' . $loadBalancerID);
 
-        $this->body = \json_decode($loadBalancer->getBody());
+        $this->body = \json_decode((string) $loadBalancer->getBody());
         return isset($this->body->result->id);
     }
 }
