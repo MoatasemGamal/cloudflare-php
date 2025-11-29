@@ -137,7 +137,7 @@ class PageRulesActions implements Configurations
 
     public function setForwardingURL(int $statusCode, string $forwardingUrl): void
     {
-        if (!\in_array($statusCode, ['301', '302'], true)) {
+        if (!\in_array($statusCode, [301, 302], true)) {
             throw new ConfigurationsException('Status Codes can only be 301 or 302.');
         }
 

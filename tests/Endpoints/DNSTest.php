@@ -34,7 +34,7 @@ class DNSTest extends TestCase
             );
 
         $dns = new DNS($mock);
-        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com', '127.0.0.1', '120', false);
+        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com', '127.0.0.1', 120, false);
     }
 
     public function testAddMXRecordPriority10(): void
@@ -54,12 +54,12 @@ class DNSTest extends TestCase
                     'content' => '127.0.0.1',
                     'ttl' => 120,
                     'proxied' => false,
-            'priority' => 10,
+                    'priority' => 10,
                 ]),
             );
 
         $dns = new DNS($mock);
-        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', '120', false, 10);
+        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', 120, false, '10');
     }
 
     public function testAddMXRecordPriority0(): void
@@ -84,7 +84,7 @@ class DNSTest extends TestCase
             );
 
         $dns = new DNS($mock);
-        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', '120', false, 0);
+        $dns->addRecord('023e105f4ecef8ad9ca31a8372d0c353', 'MX', 'example.com', '127.0.0.1', 120, false, '0');
     }
 
     public function testListRecords(): void
@@ -113,8 +113,8 @@ class DNSTest extends TestCase
         $zones = new DNS($mock);
         $result = $zones->listRecords('023e105f4ecef8ad9ca31a8372d0c353', 'A', 'example.com', '127.0.0.1', 1, 20, 'type', 'desc');
 
-        $this->assertObjectHasAttribute('result', $result);
-        $this->assertObjectHasAttribute('result_info', $result);
+        $this->assertObjectHasProperty('result', $result);
+        $this->assertObjectHasProperty('result_info', $result);
 
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $result->result[0]->id);
         $this->assertEquals(1, $result->result_info->page);
@@ -189,7 +189,7 @@ class DNSTest extends TestCase
         $this->assertEquals('372e67954025e0ba6aaa6d586b9e0b59', $dns->getBody()->result->id);
 
         foreach ($details as $property => $value) {
-            $this->assertEquals($result->result->{ $property }, $value);
+            $this->assertEquals($result->result->{$property}, $value);
         }
     }
 }

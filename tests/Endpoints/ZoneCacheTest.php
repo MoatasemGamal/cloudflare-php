@@ -95,43 +95,23 @@ class ZoneCacheTest extends TestCase
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments'),
             );
 
+        // Track the post calls
+        $postCallCount = 0;
+        $expectedPostCalls = [
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/first/purge_cache', ['files' => ['https://example.com/file.jpg']]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/second/purge_cache', ['files' => ['https://example.com/file.jpg']]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/third/purge_cache', ['files' => ['https://example.com/file.jpg']]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/purge_cache', ['files' => ['https://example.com/file.jpg']]],
+        ];
+
         $mock->expects($this->exactly(4))
             ->method('post')
-            ->willReturn($cacheResp)
-            ->withConsecutive(
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/first/purge_cache'),
-                    $this->equalTo([
-                        'files' => [
-                            'https://example.com/file.jpg',
-                        ],
-                    ]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/second/purge_cache'),
-                    $this->equalTo([
-                        'files' => [
-                            'https://example.com/file.jpg',
-                        ],
-                    ]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/third/purge_cache'),
-                    $this->equalTo([
-                        'files' => [
-                            'https://example.com/file.jpg',
-                        ],
-                    ]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/purge_cache'),
-                    $this->equalTo([
-                        'files' => [
-                            'https://example.com/file.jpg',
-                        ],
-                    ]),
-                ],
-            );
+            ->willReturnCallback(function ($uri, $data) use ($cacheResp, &$postCallCount, $expectedPostCalls) {
+                $this->assertEquals($expectedPostCalls[$postCallCount][0], $uri);
+                $this->assertEquals($expectedPostCalls[$postCallCount][1], $data);
+                $postCallCount++;
+                return $cacheResp;
+            });
 
         $zones = new Zones($mock);
         $result = $zones->cachePurge('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', [
@@ -155,27 +135,23 @@ class ZoneCacheTest extends TestCase
                 $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments'),
             );
 
+        // Track the post calls  
+        $postCallCount = 0;
+        $expectedPostCalls = [
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/first/purge_cache', ['purge_everything' => true]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/second/purge_cache', ['purge_everything' => true]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/third/purge_cache', ['purge_everything' => true]],
+            ['zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/purge_cache', ['purge_everything' => true]],
+        ];
+
         $mock->expects($this->exactly(4))
             ->method('post')
-            ->willReturn($cacheResp)
-            ->withConsecutive(
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/first/purge_cache'),
-                    $this->equalTo(['purge_everything' => true]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/second/purge_cache'),
-                    $this->equalTo(['purge_everything' => true]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/environments/third/purge_cache'),
-                    $this->equalTo(['purge_everything' => true]),
-                ],
-                [
-                    $this->equalTo('zones/c2547eb745079dac9320b638f5e225cf483cc5cfdda41/purge_cache'),
-                    $this->equalTo(['purge_everything' => true]),
-                ],
-            );
+            ->willReturnCallback(function ($uri, $data) use ($cacheResp, &$postCallCount, $expectedPostCalls) {
+                $this->assertEquals($expectedPostCalls[$postCallCount][0], $uri);
+                $this->assertEquals($expectedPostCalls[$postCallCount][1], $data);
+                $postCallCount++;
+                return $cacheResp;
+            });
 
         $zones = new Zones($mock);
         $result = $zones->cachePurgeEverything('c2547eb745079dac9320b638f5e225cf483cc5cfdda41', true);

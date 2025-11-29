@@ -30,7 +30,7 @@ class ZonesTest extends TestCase
         $zones = new Zones($mock);
         $result = $zones->addZone('example.com');
 
-        $this->assertObjectHasAttribute('id', $result);
+        $this->assertObjectHasProperty('id', $result);
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $result->id);
 
         $response = $this->getPsr7JsonResponseForFixture('Endpoints/createPageRule.json');
@@ -79,7 +79,7 @@ class ZonesTest extends TestCase
         $zones = new Zones($mock);
         $result = $zones->addZone('example.com', false, '023e105f4ecef8ad9ca31a8372d0c353');
 
-        $this->assertObjectHasAttribute('id', $result);
+        $this->assertObjectHasProperty('id', $result);
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $result->account->id);
     }
 
@@ -128,8 +128,8 @@ class ZonesTest extends TestCase
         $zones = new Zones($mock);
         $result = $zones->listZones('example.com', 'active', 1, 20, 'status', 'desc');
 
-        $this->assertObjectHasAttribute('result', $result);
-        $this->assertObjectHasAttribute('result_info', $result);
+        $this->assertObjectHasProperty('result', $result);
+        $this->assertObjectHasProperty('result_info', $result);
 
         $this->assertEquals('023e105f4ecef8ad9ca31a8372d0c353', $result->result[0]->id);
         $this->assertEquals(1, $result->result_info->page);
@@ -198,8 +198,8 @@ class ZonesTest extends TestCase
         $zones = new Zones($mock);
         $analytics = $zones->getAnalyticsDashboard('c2547eb745079dac9320b638f5e225cf483cc5cfdda41');
 
-        $this->assertObjectHasAttribute('since', $analytics->totals);
-        $this->assertObjectHasAttribute('since', $analytics->timeseries[0]);
+        $this->assertObjectHasProperty('since', $analytics->totals);
+        $this->assertObjectHasProperty('since', $analytics->timeseries[0]);
     }
 
     public function testChangeDevelopmentMode(): void

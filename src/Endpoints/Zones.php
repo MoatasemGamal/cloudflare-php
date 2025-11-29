@@ -71,7 +71,7 @@ class Zones implements API
         $user = $this->adapter->get('zones/' . $zoneId);
         $this->body = \json_decode((string) $user->getBody());
 
-        return (object)['result' => $this->body->result];
+        return (object) ['result' => $this->body->result];
     }
 
     public function listZones(
@@ -108,7 +108,7 @@ class Zones implements API
         $user = $this->adapter->get('zones', $query);
         $this->body = \json_decode((string) $user->getBody());
 
-        return (object)['result' => $this->body->result, 'result_info' => $this->body->result_info];
+        return (object) ['result' => $this->body->result, 'result_info' => $this->body->result_info];
     }
 
     public function getZoneID(string $name = ''): string
@@ -131,7 +131,7 @@ class Zones implements API
 
         $this->body = $response->getBody();
 
-        return \json_decode($this->body)->result;
+        return \json_decode((string) $this->body)->result;
     }
 
     /**
@@ -178,7 +178,7 @@ class Zones implements API
     {
         if ($includeEnvironments) {
             $env = $this->adapter->get("zones/$zoneID/environments");
-            $envs = \json_decode($env->getBody(), true);
+            $envs = \json_decode((string) $env->getBody(), true);
             foreach ($envs['result']['environments'] as $env) {
                 $this->adapter->post("zones/$zoneID/environments/{$env['ref']}/purge_cache", ['purge_everything' => true]);
             }
@@ -213,7 +213,7 @@ class Zones implements API
 
         if ($includeEnvironments) {
             $env = $this->adapter->get("zones/$zoneID/environments");
-            $envs = \json_decode($env->getBody(), true);
+            $envs = \json_decode((string) $env->getBody(), true);
             foreach ($envs['result']['environments'] as $env) {
                 $this->adapter->post("zones/$zoneID/environments/{$env['ref']}/purge_cache", $options);
             }
