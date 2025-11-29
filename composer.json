@@ -2,7 +2,15 @@
   "name": "cloudflare/sdk",
   "description": "Modern PHP binding for v4 of the Cloudflare Client API with PHP 8.1+ support.",
   "type": "library",
-  "keywords": ["cloudflare", "api", "dns", "cdn", "security", "waf", "firewall"],
+  "keywords": [
+    "cloudflare",
+    "api",
+    "dns",
+    "cdn",
+    "security",
+    "waf",
+    "firewall"
+  ],
   "homepage": "https://github.com/MoatasemGamal/cloudflare-php",
   "require": {
     "php": ">=8.1",
@@ -25,7 +33,7 @@
     },
     {
       "name": "Moatasem Gamal",
-      "email": "moatasemgamal@gmail.com",
+      "email": "moatasemco@gmail.com",
       "role": "Maintainer"
     }
   ],
